@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brick Break</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+
+<div id="warningoverlay"></div>
+
+<div id="overlay"></div>
+
+<div class="container">
+    <h1 id="title">Brick Break</h1>
+
+    <div id='controls'>
+        <span id='level'>Level: 1</span>
+        <span id='points'>Points: 0</span>
+    </div>
+
+    <div id='message'>
+        <div id='gameover'></div>
+    </div>
+
+    <table id='game'>
+    </table>
+
+    <div id='button'>
+        <span id="leftbutton">Left</span>
+        <span id='rightbutton'>Right</span>
+    </div>
+
+    <div id='welcome'>
+        <div id='highscore'></div>
+        <span id="start">Start</span>
+    </div>
+
+    <p>
+
+        <small>
+            made by: Sven Marquardt, Cedric Pantermehl, Heiko Pantermehl, Markus Krebs; 2016<br>
+
+        </small>
+    </p>
+</div>
+<script type='application/dart' src='brickgameClient.dart'></script>
+<script src='packages/browser/dart.js'></script>
+</body>
+</html>

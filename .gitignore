@@ -1,0 +1,12 @@
+packages/
+.pub/
+.sass-cache/
+*.deps
+pubspec.lock
+client/web/packages/
+*.js
+.idea/workspace.xml
+Würde .idea/workspace_BACKUP_22740.xml löschen
+Würde .idea/workspace_BASE_22740.xml löschen
+Würde .idea/workspace_LOCAL_22740.xml löschen
+Würde .idea/workspace_REMOTE_22740.xml löschen
