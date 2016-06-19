@@ -1,12 +1,15 @@
-packages/
+build/
+.idea/
+doc/api/
 .pub/
-.sass-cache/
-*.deps
+.buildlog
+*.iml
+*.ipr
+*.iws
 pubspec.lock
-client/web/packages/
-*.js
-.idea/workspace.xml
-Würde .idea/workspace_BACKUP_22740.xml löschen
-Würde .idea/workspace_BASE_22740.xml löschen
-Würde .idea/workspace_LOCAL_22740.xml löschen
-Würde .idea/workspace_REMOTE_22740.xml löschen
+.packages
+.DS_Store
+*.js_
+*.js.deps
+*css.map
+
