@@ -61,11 +61,16 @@ class GameKey{
       "secret":"$secret",
     };
     try {
-      final client = await new  HttpClient().post(uri.host, uri.port, "/game");
-      client.write(parameter(newGame));
-      HttpClientResponse response = await client.close();
-      final body = await response.transform(UTF8.decoder).join("\n");
-      return response.statusCode == 200 ? JSON.decode(body) : body;
+      final client = await HttpRequest.request(
+          "${this._uri.resolve("/game")}",
+          method: 'POST',
+          sendData: parameter({'game' : "$newGame"}),
+      requestHeaders: {
+        'content-type': 'application/x-www-form-urlencoded',
+        'charset': 'UTF-8'
+      }
+      );
+      return client.status == 200 ? JSON.decode()
     } catch (error) {
       print("GameKey.registerGame() caused an error: '$error'");
       return null;
@@ -78,10 +83,6 @@ class GameKey{
     Returns null on failure
    */
   Future<Map> registerUser(String name, String password) async{
-    final Map newUser = {
-      "name":"$name",
-      "pwd":"$password",
-    };
     try {
       final answer = await HttpRequest.request(
           "${this._uri.resolve("/user")}",
@@ -110,13 +111,7 @@ class GameKey{
   Future<Map> getUser(String name, String password) async{
     final link = uri.resolve("/user/$name").resolveUri(new Uri(queryParameters:{'id':"$name",'pwd' : "$password",'byname':"true"}));
     try {
-      final client = await new HttpClient().getUrl(link);
-      HttpClientResponse response = await client.close();
-      var body = await response.transform(UTF8.decoder).join("\n");
-      //body = body.replaceAll(new RegExp('\c_'),"");
-      body = body.replaceAll("\r","");
-      body = body.replaceAll("\n","");
-      return response.statusCode == 200 ? JSON.decode(body) : null;
+      final uri = this._uri.resolve("user/$name").resolveUri(new Uri(queryParamters: {'pwd'}))
     } catch (error) {
       print("GameKey.getUser() caused an error: '$error'");
       return null;
