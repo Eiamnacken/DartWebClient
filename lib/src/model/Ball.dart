@@ -1,5 +1,4 @@
 part of brickGame;
-
 ///
 /// Objekt das sich von selbst durch den Spielraum bewegt
 /// Außerdem fügt es [Brick] schaden zu bei Kontakt
@@ -24,7 +23,7 @@ class Ball extends MoveableObject {
     _damage = damage;
   }
 
-  Direction get direction => _direction;
+
 
   int get damage => _damage;
 
@@ -32,7 +31,7 @@ class Ball extends MoveableObject {
   /// Ändert die geschwindigkeit die der [Ball] pro zeiteinheit zurück legt
   ///
   void changeSpeed(int speed) {
-    _moveSpeed = speed;
+    super.moveSpeed = speed;
   }
 
   ///
@@ -43,20 +42,20 @@ class Ball extends MoveableObject {
       _getCollsionWithPlayer(collisionObject);
     } else if (collisionObject == null) {
       if (direction == Direction.up) {
-        _direction = Direction.down;
-      } else if (_direction == Direction.leftUp) {
-        if (xPosition == 0) _direction = Direction.rightUp;
-        if (yPosition == 0) _direction = Direction.leftDown;
-      } else if (_direction == Direction.rightUp) {
-        if (xPosition == gameField.length - 1) _direction = Direction.leftUp;
-        if (yPosition == 0) _direction = Direction.rightDown;
-      } else if (_direction == Direction.leftDown) {
-        _direction = Direction.rightDown;
-      } else if (_direction == Direction.rightDown) {
-        _direction = Direction.leftDown;
+        direction = Direction.down;
+      } else if (direction == Direction.leftUp) {
+        if (xPosition == 0) direction = Direction.rightUp;
+        if (yPosition == 0) direction = Direction.leftDown;
+      } else if (direction == Direction.rightUp) {
+        if (xPosition == gameField.length - 1) direction = Direction.leftUp;
+        if (yPosition == 0) direction = Direction.rightDown;
+      } else if (direction == Direction.leftDown) {
+        direction = Direction.rightDown;
+      } else if (direction == Direction.rightDown) {
+        direction = Direction.leftDown;
       }
     } else
-      _direction = collisionObject.getCollison(this);
+      direction = collisionObject.getCollison(this);
   }
 
   ///
@@ -77,11 +76,11 @@ class Ball extends MoveableObject {
     int ballPosition = this.xPosition * this.width;
     if (ballPosition >= playerMiddle &&
         ballPosition <= playerMiddle + playerPieces) {
-      _direction = Direction.up;
+      direction = Direction.up;
     } else if (ballPosition >= playerMiddle - playerPieces &&
         ballPosition <= playerMiddle) {
-      _direction = Direction.leftUp;
-    } else _direction = Direction.rightUp;
+      direction = Direction.leftUp;
+    } else direction = Direction.rightUp;
   }
 
   @override
@@ -89,7 +88,8 @@ class Ball extends MoveableObject {
       GameController controller) {
     if (yPosition == gameField[0].length - 1) {
       gameField[xPosition][yPosition] =
-      new Field(xPosition, yPosition, width, height);
+      new Field.second(xPosition,yPosition);
+      destroyed=true;
       controller.updateView(gameField);
     }
     Map coordinates = getValuesForDirection(direction);
@@ -112,7 +112,7 @@ class Ball extends MoveableObject {
 
       }
 
-      move(_direction, gameField, controller);
+      move(direction, gameField, controller);
     }
   }
 

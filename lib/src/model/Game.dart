@@ -149,10 +149,7 @@ class Game {
     }
   }
 
-  ///
-  /// Löscht ein [MoveableObject] aus dem Spiel
-  ///
-  void _removeObject(MoveableObject object) {}
+
 
   ///
   /// Setzt alle werte auf den Standard zurück

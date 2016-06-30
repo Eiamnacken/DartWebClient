@@ -5,14 +5,14 @@ part of brickGame;
 /// Es ist Ziel des Spieles diese zu zerstören
 ///
 class Brick extends GameObject {
+
+
+
+
   ///
-  /// Gibt an ob dieser [Brick] ein Item enthält welches nach dem [destroy] freigelassen
-  /// wird
+  /// Das [Item] das dieser brick entahlten kann
   ///
-  bool _containsItem;
-
-
-
+  Item _item;
 
 
   ///
@@ -33,25 +33,26 @@ class Brick extends GameObject {
   void decHealth(int damage, List<List<GameObject>> gameField) {
     health = getHealth(damage, health);
     if (health == Health.grey) {
-      gameField[xPosition][yPosition] = new Field(xPosition,yPosition,width,height);
+      destroy(gameField);
     }
 
   }
 
   ///
   /// Zerstört diesen [Brick] und prüft ob es ein [Item] enthält
-  /// Gibt ein [Item] zurück wenn es eines enthält ansonsten null
   ///
-  Item destroy() {
-    return _release();
+  /// Wenn dieser [Brick] ein Item enthält, wird dieses an dieser stelle erzeugt
+  ///
+  void destroy(List<List<GameObject>> gameField) {
+    if(_item!=null){
+      gameField[xPosition][yPosition]=new Field.second(xPosition,yPosition);
+      gameField[xPosition][yPosition].itemsBuffer.add(_item);
+      _item.release();
+    }else gameField[xPosition][yPosition]= new Field.second(xPosition,yPosition);
+
   }
 
-  ///
-  /// Legt ein neues [Item] an und gibt diese zurück
-  ///
-  Item _release() {
-    return null;
-  }
+
 
   @override
   void collision(List<List<GameObject>> gameField, GameObject collisionObject) {
@@ -66,7 +67,7 @@ class Brick extends GameObject {
     String buffer="";
     switch(health){
       case Health.brown:
-      buffer="brownBrick";
+        buffer="brownBrick";
         break;
       case Health.green:
         buffer="greenBrick";

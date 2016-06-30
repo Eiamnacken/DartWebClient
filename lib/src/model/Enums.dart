@@ -67,10 +67,7 @@ enum Effect {
   ///
   secondBall,
 
-  ///
-  /// Verlangsamt die Bewegungsgeschwindigkeit des [Player]
-  ///
-  slowerPLayer,
+
 
   ///
   /// Invertiert die Steuerung des [Player]
@@ -82,7 +79,6 @@ enum Effect {
   ///
   smallerPlayer
 }
-
 ///
 /// Leben eines [Brick] [green] bedeutet noch 3 treffer [yellow] 2 und [red] 1
 /// [grey] sind zerstörte [Brick]
