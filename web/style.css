@@ -95,8 +95,7 @@ h2 {
 #cancelbutton {
   font-size: 2rem;
   height: auto;
-  position: fixed;
-  right: 13em;
+
 }
 
 /* Game controls */
@@ -180,46 +179,14 @@ input::-webkit-input-placeholder { color: lightgray; font-style: italic; }
 input::-moz-placeholder { color: lightgray; font-style: italic; }
 /*End High Score */
 
-input::-moz-placeholder {
-  color: lightgray;
-  font-style: italic; }
-
-/* --- */
-#level, #points, #welcome #start {
-  padding: 7px 20px 7px 20px;
-  font-style: normal;
-  font-size: 2rem;
-  text-decoration: none;
-  color: black;
-  background: rgba(255, 255, 255, 0.5);
-  border: 3px solid black;
-  border-radius: 10px;
-  cursor: hand; }
-
-#leftbutton, #rightbutton {
-  padding: 7px 20px 7px 20px;
-  font-style: normal;
-  font-size: 1rem;
-  text-decoration: none;
-  color: black;
-  background: rgba(255, 255, 255, 0.5);
-  border: 3px solid black;
-  border-radius: 10px;
-  cursor: hand; }
-  #leftbutton :hover, #rightbutton :hover {
-    cursor: hand; }
 
 /* Gamefield */
-body {
-  background-color: olive; }
 
 #game {
   margin: 50px auto 50px auto;
   /* background-image: url('img/brickwall.jpg');
    background-repeat: no-repeat;*/
   background-color: black;
-  ///background-image: url('img/brickwall.jpg');
-
   background-size: cover;
 
 }
@@ -268,14 +235,3 @@ body {
   background: inherit !important;
   border: none !important;
   border-spacing: 0px; }
-
-
-/*
-green, yellow, red, grey
-.brick {
-  background-color:  !important;
-  border-radius: 10px;
-}
-*/
-
-/*# sourceMappingURL=style.css.map */

@@ -1,5 +1,3 @@
-
-
 @mixin base-game-object(){
   border: none !important;
   border-spacing: 0px;
@@ -230,16 +228,3 @@ body {
 .field{
   @include base-field(inherit);
 }
-//TDOD: items brauchen eine neue klasse kann erst getestet werden wenn es die ersten Items gibt unterschieden in effekt
-
-
-
-
-/*
-green, yellow, red, grey
-.brick {
-  background-color:  !important;
-  border-radius: 10px;
-}
-*/
-
