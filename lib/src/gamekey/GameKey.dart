@@ -22,7 +22,7 @@ class GameKey{
   //Name of the Game
   String _nameofGame = "BrickGame";
 
- /*
+  /*
     Uri of GameKey REST API
   */
   Uri get uri => this._uri;

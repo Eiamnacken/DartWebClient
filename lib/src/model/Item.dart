@@ -65,7 +65,7 @@ class Item extends MoveableObject {
   ///
   /// Wendet die eigenschaften dieses Items auf den Player an
   ///
-  void activateItem(Player player) {
+  void activateItem([Player player]) {
     switch (effect) {
       case Effect.damageBall:
         {}

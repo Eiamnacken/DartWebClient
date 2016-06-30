@@ -113,17 +113,21 @@ class Level {
       int counter = _countPositiveItems;
       List<Ball> itemBalls = [];
       Ball ballBuffer = balls.first;
+      Direction ballDirection;
       while (counter != 0) {
         Brick objectBuffer = bricks[randomNumber.nextInt(bricks.length - 1)];
 
         if (objectBuffer._item == null) {
-          for (int i = 0; i < 6; i++) {
-            Ball itemBall = new Ball(
+          for (int i = 0; i < 3; i++) {
+            ballDirection=Direction.values[randomNumber.nextInt(5)];
+            Ball itemBall = new Ball.withDirection(
                 objectBuffer.xPosition,
                 objectBuffer.yPosition,
                 ballBuffer.height,
                 ballBuffer.width,
-                ballBuffer._moveSpeed);
+                ballBuffer._moveSpeed,
+                ballDirection
+                );
             itemBalls.add(itemBall);
             balls.add(itemBall);
           }

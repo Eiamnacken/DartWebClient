@@ -14,12 +14,15 @@ class Ball extends MoveableObject {
   ///
   bool activated=false;
 
-  Ball(int xPosition, int yPosition, int width, int length, int moveSpeed,
-      [Direction direction = Direction.down])
-      : super(xPosition, yPosition, width, length, moveSpeed, direction) {
+  Ball(int xPosition, int yPosition, int width, int length, int moveSpeed)
+      : super(xPosition, yPosition, width, length, moveSpeed, Direction.down) {
     _damage = 1;
   }
 
+  Ball.withDirection(int xPosition, int yPosition, int width, int length, int moveSpeed,Direction direction)
+      : super(xPosition, yPosition, width, length, moveSpeed, direction) {
+    _damage = 1;
+  }
 
 
 
@@ -46,6 +49,10 @@ class Ball extends MoveableObject {
   /// Wird nur von Objekten aufgerufen die bei ihrer eigenen bewegung mit dem [Ball kolidieren
   ///
   void collision(List<List<GameObject>> gameField, GameObject collisionObject) {
+    if(collisionObject is Ball){
+      collisionObject._direction=getOpposit(collisionObject._direction);
+      this._direction=getOpposit(this._direction);
+    }
     if (collisionObject is Player) {
       _getCollsionWithPlayer(collisionObject);
     } else if (collisionObject == null) {
@@ -109,6 +116,7 @@ class Ball extends MoveableObject {
       new Field.second(xPosition,yPosition);
       destroyed=true;
       controller.updateView(gameField);
+      return;
     }
     Map coordinates = getValuesForDirection(direction);
 
@@ -119,13 +127,16 @@ class Ball extends MoveableObject {
     if (!response.keys.first) {
       switchObjects(gameField, this, response.values.first);
       controller.updateView(gameField);
+      return;
     } else {
       _changeDirection(direction, response[true], gameField, coordinates);
       if (response[true] != null) {
         response[true].collision(gameField, this);
         if(response[true] is Brick){
           Brick brickBuffer = response[true];
+          brickBuffer.collision(gameField,this);
           controller.game.increasePoints(brickBuffer.health);
+          return;
         }
 
       }

@@ -57,8 +57,10 @@ class Brick extends GameObject {
   @override
   void collision(List<List<GameObject>> gameField, GameObject collisionObject) {
     if (collisionObject is Ball) {
-
       decHealth(collisionObject.damage, gameField);
+      if(_item!=null){
+        _item.activateItem();
+      }
     } else
       return;
   }

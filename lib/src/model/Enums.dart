@@ -5,6 +5,34 @@ part of brickGame;
 ///
 enum Direction { leftUp, leftDown, rightUp, rightDown, up, down, left, right }
 
+
+Direction getOpposit(Direction direction){
+  Direction newDirection;
+  switch(direction){
+    case Direction.down:
+      newDirection=Direction.up;
+      break;
+    case Direction.up:
+      newDirection=Direction.down;
+      break;
+    case Direction.leftDown:
+      newDirection=Direction.rightUp;
+      break;
+    case Direction.leftUp:
+      newDirection=Direction.rightDown;
+      break;
+    case Direction.rightUp:
+      newDirection=Direction.leftDown;
+      break;
+    case Direction.rightDown:
+      newDirection=Direction.leftUp;
+      break;
+    default:
+      break;
+  }
+  return newDirection;
+}
+
 ///
 /// Liefert die x und y werte für eine übergebene [Direction] als map
 ///

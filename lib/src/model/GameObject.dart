@@ -120,6 +120,7 @@ abstract class MoveableObject extends GameObject {
 
 
 
+
     int xVert=0;
     int yVert=0;
     var response;
@@ -161,8 +162,10 @@ abstract class MoveableObject extends GameObject {
       }catch(e){
         print(e);
       }
-
-
+      //Kollission bälle
+      if(this is Ball && buffer is Ball){
+        return {true: buffer};
+      }
       //Auf dem weg zum player ?
       if (buffer is Field && (_direction == Direction.down|| _direction==Direction.rightDown||_direction==Direction.leftDown)) {
         if (buffer.yPosition == gameField[0].length - 1) {
@@ -193,10 +196,11 @@ abstract class MoveableObject extends GameObject {
       }
     } else return {true: buffer};
 
-
+    //Leeres feld alles in ordnung
     if (buffer is Field) {
       return {false: buffer};
     }
+    //Der player darf gegen den ball fahren
     if (this is Player && buffer is Ball) {
       return {false: buffer};
     }
