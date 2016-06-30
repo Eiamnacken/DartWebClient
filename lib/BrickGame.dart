@@ -4,8 +4,6 @@ import 'dart:html';
 import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
-import 'dart:convert';
-import 'dart:isolate';
 
 part 'src/controller/GameController.dart';
 

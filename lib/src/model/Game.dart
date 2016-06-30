@@ -57,11 +57,14 @@ class Game {
     List balls = gameFields[countLevel].balls;
     if (balls.isNotEmpty) {
       balls.forEach((ball) {
-        ball.move(
-            ball.direction, gameFields[countLevel].gameField, controller);
-        if (ball.yPosition == _getPlayer().yPosition) {
-          gameFields[countLevel].balls.removeLast();
-          controller.updateView(gameFields[countLevel].gameField);
+        //Nur aktivierte bälle bewegen
+        if(ball.activated) {
+          ball.move(
+              ball.direction, gameFields[countLevel].gameField, controller);
+          if (ball.yPosition == _getPlayer().yPosition) {
+            gameFields[countLevel].balls.removeLast();
+            controller.updateView(gameFields[countLevel].gameField);
+          }
         }
         if(won()) newLevel();
 
@@ -146,6 +149,7 @@ class Game {
       Level level = new Level();
       level.readLevel(jsonLevel);
       gameFields.add(level);
+
     }
   }
 

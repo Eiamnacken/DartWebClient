@@ -16,6 +16,14 @@ class Item extends MoveableObject {
   ///
   bool _isPositive;
 
+
+
+  ///
+  /// Handelt es sich bei dem Effekt um [Effect.secondBall] werden hier die Bälle
+  /// gespeichert, um diese nach dem Aktivieren zu Spawnen
+  ///
+  List<Ball> ballBomb=[];
+
   ///
   /// Um welche art von [Item] handelt es sich
   ///
@@ -28,9 +36,11 @@ class Item extends MoveableObject {
   /// Wie lange ist ein Item aktiv
   ///
   Timer _activeItem;
-  Item(int xPosition, int yPosition, int width, int length, int moveSpeed,
-      Direction direction)
-      : super(xPosition, yPosition, width, length, moveSpeed, direction);
+  Item(int xPosition, int yPosition, int width, int length, int moveSpeed,this.effect)
+      : super(xPosition, yPosition, width, length, moveSpeed, Direction.down);
+
+  Item.withBall(int xPosition,int yPosition, int width, int length,int moveSpeed,this.effect,this.ballBomb):
+    super(xPosition,yPosition,width,length,moveSpeed,Direction.down);
 
 
 
@@ -69,7 +79,9 @@ class Item extends MoveableObject {
         }
         break;
       case Effect.secondBall:
-        {}
+        {
+          ballBomb.forEach((e)=>e.activated=true);
+        }
         break;
       case Effect.invertPlayer:
         {}

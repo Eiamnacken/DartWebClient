@@ -7,7 +7,7 @@
     "ballSpeed":1,
     "playerSpeed":1,
     "itemSpeed":1,
-    "countPosItems":0,
+    "countPosItems":1,
     "countNegItems":0,
     "levelLength":9,
     "levelHeight":16,

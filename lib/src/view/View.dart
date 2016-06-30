@@ -117,6 +117,7 @@ class View {
             ..setProperty("padding-right","0px")
         ..setProperty("padding-left","0px");
     }
+    return element;
 
   }
 

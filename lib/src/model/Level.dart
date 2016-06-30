@@ -64,7 +64,6 @@ class Level {
         playerSpeed,
         itemSpeed;
 
-
     Map jsonLevel = JSON.decode(config);
     _height = int.parse(jsonLevel['levelHeight'].toString());
     _length = int.parse(jsonLevel['levelLength'].toString());
@@ -89,42 +88,61 @@ class Level {
     for (int row = 0; row < jsonField.length; row++) {
       for (int col = 0; col < jsonField[row].length; col++) {
         if (jsonField[row][col].compareTo('e') == 0) {
-          _gameField[col][row] = new Field(col,row,brickLength,brickHeight);
-        } else if (jsonField[row][col].compareTo('rb') == 0) {
-          Brick brick = new Brick(col, row, brickHeight, brickLength, 'red');
-          _gameField[col][row] = brick;
-          bricks.add(brick);
-        } else if (jsonField[row][col].compareTo('yb') == 0) {
-          Brick brick = new Brick(col, row, brickHeight, brickLength, 'yellow');
-          _gameField[col][row] = brick;
-          bricks.add(brick);
-        } else if (jsonField[row][col].compareTo('gb') == 0) {
-          Brick brick = new Brick(col, row, brickHeight, brickLength, 'green');
-          _gameField[col][row] = brick;
-          bricks.add(brick);
-        }
-        /*else if(jsonField[row][col].compareTo('item') == 0) {
-        }*/
-        else if (jsonField[row][col].compareTo('ball') == 0) {
+          _gameField[col][row] = new Field(col, row, brickLength, brickHeight);
+        } else if (jsonField[row][col].compareTo('item') ==
+            0) {} else if (jsonField[row][col].compareTo('ball') == 0) {
           Ball ball = new Ball(col, row, ballHeight, ballLength, ballSpeed);
+          ball.activated = true;
           _gameField[col][row] = ball;
           balls.add(ball);
         } else if (jsonField[row][col].compareTo('player') == 0) {
-          _player = new Player(col, row, playerLength, playerHeight, playerSpeed);
+          _player =
+              new Player(col, row, playerLength, playerHeight, playerSpeed);
           _gameField[col][row] = player;
-
+        } else {
+          Brick newBrick = new Brick(
+              col, row, brickLength, brickHeight, jsonField[row][col]);
+          _gameField[col][row] = newBrick;
+          bricks.add(newBrick);
         }
       }
     }
+    //Aktiviere Items an einer random stelle
+    if (_countPositiveItems != 0) {
+      Random randomNumber = new Random.secure();
+      int counter = _countPositiveItems;
+      List<Ball> itemBalls = [];
+      Ball ballBuffer = balls.first;
+      while (counter != 0) {
+        Brick objectBuffer = bricks[randomNumber.nextInt(bricks.length - 1)];
 
-  }
-
-  void _createCss(){
-
+        if (objectBuffer._item == null) {
+          for (int i = 0; i < 6; i++) {
+            Ball itemBall = new Ball(
+                objectBuffer.xPosition,
+                objectBuffer.yPosition,
+                ballBuffer.height,
+                ballBuffer.width,
+                ballBuffer._moveSpeed);
+            itemBalls.add(itemBall);
+            balls.add(itemBall);
+          }
+          objectBuffer._item = new Item.withBall(
+              objectBuffer.xPosition,
+              objectBuffer.yPosition,
+              brickHeight,
+              brickLength,
+              itemSpeed,
+              Effect.secondBall,
+              itemBalls);
+          counter--;
+        }
+      }
+    }
   }
 
   Player get player => _player;
 
   List<List<GameObject>> get gameField => _gameField;
-  set gameField(List<List<GameObject>> gameField) => _gameField=gameField;
+  set gameField(List<List<GameObject>> gameField) => _gameField = gameField;
 }

@@ -99,18 +99,20 @@ Health getHealth(int damage, Health health) {
   } else
     return values[index];
 }
-
+///
+/// Um was für einen Brick handelt es sich
+///
 Health generateHealth(String health) {
   Health buffer;
-  if (health == "green") {
+  if (health == "gb") {
     buffer = Health.green;
-  } else if (health == "grey") {
+  } else if (health == "gyb") {
     buffer = Health.grey;
-  } else if (health == "yellow") {
+  } else if (health == "yb") {
     buffer = Health.yellow;
-  } else if (health == "red") {
+  } else if (health == "rb") {
     buffer = Health.red;
-  } else if (health == "brown") {
+  } else if (health == "bb") {
     buffer = Health.brown;
   }
   return buffer;

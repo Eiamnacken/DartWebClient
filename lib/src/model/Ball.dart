@@ -9,12 +9,20 @@ class Ball extends MoveableObject {
   ///
   int _damage;
 
+  ///
+  /// Ist dieser Ball schon im Soiel ?
+  ///
+  bool activated=false;
 
   Ball(int xPosition, int yPosition, int width, int length, int moveSpeed,
       [Direction direction = Direction.down])
       : super(xPosition, yPosition, width, length, moveSpeed, direction) {
     _damage = 1;
   }
+
+
+
+
 
   ///
   /// Ändert den [_damage] den ein [Ball] einem [Brick] zufügt
@@ -70,15 +78,24 @@ class Ball extends MoveableObject {
     collision(gameField, collisionObject);
   }
 
-  void _getCollsionWithPlayer(MoveableObject object) {
+  ///
+  /// Entscheide in welche Richtung der [Ball] fliegen soll wenn er den Spieler trifft
+  /// Einfachhalber wird nur dadurch entschieden auf welche seite des Spielers der Ball trifft
+  /// linke seite links hoch fliegen,rechte seite rechts hoch fliegen
+  /// Mitte bleibt die Mitte
+  ///
+  void _getCollsionWithPlayer(Player object) {
+    //Da wir den Spieler in 3 teile aufteilen links,rechts,mitte
     int playerPieces = (object.width / 3).round();
-    int playerMiddle = (object.xPosition * this.width + 1);
+    //Die Spieler mitte ist seine momentane Position plus seine breite +1 wegen rundungsfehlern
+    int playerMiddle = ((object.xPosition * this.width) + 1);
+    //Größe des Balles
     int ballPosition = this.xPosition * this.width;
     if (ballPosition >= playerMiddle &&
         ballPosition <= playerMiddle + playerPieces) {
       direction = Direction.up;
-    } else if (ballPosition >= playerMiddle - playerPieces &&
-        ballPosition <= playerMiddle) {
+    } else if ((ballPosition >= playerMiddle - playerPieces &&
+        ballPosition < playerMiddle)|| ballPosition == playerMiddle-playerPieces) {
       direction = Direction.leftUp;
     } else direction = Direction.rightUp;
   }
@@ -86,6 +103,7 @@ class Ball extends MoveableObject {
   @override
   void move(Direction direction, List<List<GameObject>> gameField,
       GameController controller) {
+    //Ball im aus tausche gegen feld so das sich der Spieler weiter bewegen kann
     if (yPosition == gameField[0].length - 1) {
       gameField[xPosition][yPosition] =
       new Field.second(xPosition,yPosition);
@@ -111,8 +129,8 @@ class Ball extends MoveableObject {
         }
 
       }
-
-      move(direction, gameField, controller);
+      //Weiter mit der neuen richtung des Objektes die geändert wurde
+      move(this.direction, gameField, controller);
     }
   }
 
