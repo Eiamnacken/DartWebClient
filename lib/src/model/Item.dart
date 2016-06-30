@@ -45,7 +45,7 @@ class Item extends MoveableObject {
 
 
   ///
-  /// Gibt an ob es ein Positiv Effekt ist
+  /// Gibt an ob es ein Positiver Effekt ist
   ///
   bool isPositive() {
     return _isPositive;
@@ -63,7 +63,7 @@ class Item extends MoveableObject {
   bool get released => _released;
 
   ///
-  /// Wendet die eigenschaften dieses Items auf den Player an
+  /// Wendet die eigenschaften dieses Items auf den Player oder andere an
   ///
   void activateItem([Player player]) {
     switch (effect) {
@@ -96,7 +96,10 @@ class Item extends MoveableObject {
         break;
     }
   }
-
+  ///
+  /// Deaktiviere wieder die fähigkeit des Items.
+  /// Nur für einige Items sinnvoll die Effekte auf gegenstände haben
+  ///
   void _deactivateItem(Player player){
     switch(effect){
       case Effect.longerPLayer:{

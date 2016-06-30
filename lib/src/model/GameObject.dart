@@ -218,7 +218,7 @@ abstract class MoveableObject extends GameObject {
   ///
   /// Tauscht den platz zwei [GameObject] im [gameField]
   ///
-  /// Diese Methode braucht überarbeitung für flüssige bewegungen
+  ///
   /// [x] momentane Position des Objekts mit dem dieses Objekt die position tauscht
   /// [y] Dito
   ///
