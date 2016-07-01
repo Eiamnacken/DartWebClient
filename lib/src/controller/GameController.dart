@@ -19,7 +19,7 @@ const gameKeyCheck = const Duration(seconds: 1);
 ///
 const gameKeyHost = "";
 
-const gameSecret = "";
+const gameSecret = "c1b8f208-1e57-4431-bc7e-82f9db6e2780";
 
 ///
 /// Portnummer des GameKeyServers
@@ -109,6 +109,9 @@ class GameController {
       } else if (event.keyCode == KeyCode.RIGHT) {
         game.movePLayer(Direction.right, this);
       }
+    });
+    view.highscore.onClick.listen((_){
+      gameKey.getStates().then((contetn)=>view.showHighscore(game,contetn));
     });
 
     view.generateField(game);

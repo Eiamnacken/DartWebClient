@@ -13,7 +13,7 @@ class View {
 
   final points = querySelector("#points");
 
-  final highscore = querySelector("#highscore");
+  final highscore = querySelector("#score");
 
   final menuview = querySelector("#menuview");
 
