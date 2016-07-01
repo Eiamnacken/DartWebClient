@@ -29,6 +29,10 @@ class View {
 
   final vanishedButton = querySelector("#button");
 
+  final saveButton = querySelector("#save");
+
+  final closeButton = querySelector("#close");
+
   HtmlElement get startGameButton => querySelector("#startgame");
 
   HtmlElement get startButton => querySelector("#start");
@@ -102,6 +106,9 @@ class View {
     }
   }
 
+  ///
+  /// Setze die länge so wie breite der einzelenen [HtmlElement] im css
+  ///
   HtmlElement _setWidthAndLength(HtmlElement element,GameObject gameObject){
     if(element==null|| gameObject==null) return null;
     var width = gameObject.width;
@@ -153,7 +160,7 @@ class View {
                   "<input type='text' id='user' placeholder='user'>"
                   "<input type='password' id='password' placeholder='password'>"
                   "<button type='button' id='save'>Save</button>"
-                  "<button type='button' id='close' class='discard'>Close</button>"
+                  "<button type='button' id='back' class='discard'>Close</button>"
                   "</form>"
       );
     } else {
