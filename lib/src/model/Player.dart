@@ -1,4 +1,5 @@
 part of brickGame;
+
 /// Wird durch den Spieler Kontrolliert. Ein rechteck am unteren Rand des
 /// des Spieles das den Ball reflektiert
 ///
@@ -16,14 +17,14 @@ class Player extends MoveableObject {
   /// Ändert die Länge des [Player]
   ///
   void changeLength(int length) {
-    length += length;
+    length = length;
   }
 
   ///
   /// Ändert den Abstand den der [Player] pro tastendruck zurück legt
   ///
   void changeSpeed(int speed) {
-    super.moveSpeed = speed;
+    _moveSpeed = speed;
   }
 
   @override
@@ -49,9 +50,7 @@ class Player extends MoveableObject {
 
   @override
   void collision(List<List<GameObject>> gameField, GameObject collisionObject) {
-    if(collisionObject is Item){
-      collisionObject.activateItem(this);
-    }
+    return;
   }
 
   String toString() {

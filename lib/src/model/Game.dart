@@ -56,22 +56,17 @@ class Game {
   void moveBall(GameController controller) {
     List balls = gameFields[countLevel].balls;
     if (balls.isNotEmpty) {
-        balls.forEach((ball) {
-          //Nur aktivierte bälle bewegen
-          if (ball.activated) {
-            ball.move(
-                ball.direction, gameFields[countLevel].gameField, controller);
-            if (ball.destroyed) {
-              ball.activated=false;
-              controller.updateView(gameFields[countLevel].gameField);
-              return;
-            }
-          }
-          if (won()) newLevel();
-        });
-        //Verhindere absturz bei wegnehmen von bällen
-      }
+      balls.forEach((ball) {
+        ball.move(
+            ball.direction, gameFields[countLevel].gameField, controller);
+        if (ball.yPosition == _getPlayer().yPosition) {
+          gameFields[countLevel].balls.removeLast();
+          controller.updateView(gameFields[countLevel].gameField);
+        }
+        if(won()) newLevel();
 
+      });
+    }
   }
 
   ///
@@ -107,16 +102,10 @@ class Game {
   }
 
   bool gameOver() {
-    bool gameOver=true;
-    gameFields[countLevel].balls.forEach((b){
-      if(!b.destroyed&&b.activated){
-        gameOver=false;
-      }
-    });
-    if(gameFields[countLevel].balls.isEmpty){
-      gameOver=true;
+    if (gameFields[countLevel].balls.length == 0) {
+      return true;
     }
-    return gameOver;
+    return false;
   }
 
   bool won() {
@@ -132,8 +121,6 @@ class Game {
   ///
   void newLevel() {
     if(countLevel != gameFields.length - 1) {
-      var balls = gameFields[countLevel].balls;
-      balls.removeRange(1,balls.length);
       countLevel++;
     }
 
@@ -159,11 +146,13 @@ class Game {
       Level level = new Level();
       level.readLevel(jsonLevel);
       gameFields.add(level);
-
     }
   }
 
-
+  ///
+  /// Löscht ein [MoveableObject] aus dem Spiel
+  ///
+  void _removeObject(MoveableObject object) {}
 
   ///
   /// Setzt alle werte auf den Standard zurück

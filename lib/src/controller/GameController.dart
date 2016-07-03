@@ -19,7 +19,7 @@ const gameKeyCheck = const Duration(seconds: 1);
 ///
 const gameKeyHost = "";
 
-const gameSecret = "c1b8f208-1e57-4431-bc7e-82f9db6e2780";
+const gameSecret = "";
 
 ///
 /// Portnummer des GameKeyServers
@@ -67,9 +67,9 @@ class GameController {
 
     view.startButton.onClick.listen((_) {
       if (_ballTrigger != null) _ballTrigger.cancel();
-      if(game.won()||game.gameOver()) {
-        _gameOver();
-      }else newGame();
+      if(game.won()||game.gameOver()) game = new Game();
+      _ballTrigger = new Timer.periodic(ballSpeed, (_) => game.moveBall(this));
+      view.generateField(game);
     });
 
     view.startGameButton.onClick.listen((_) {
@@ -96,9 +96,7 @@ class GameController {
       if (game.gameOver()) return;
       game.movePLayer(Direction.right, this);
     });
-    view.closeButton.onClick.listen((_){
-      view.closeForm();
-    });
+
 
     view.leftButton.onClick.listen((_) {
       if (game.gameOver()) return;
@@ -112,97 +110,12 @@ class GameController {
         game.movePLayer(Direction.right, this);
       }
     });
-    view.highscore.onClick.listen((_){
-      gameKey.getStates().then((contetn)=>view.showHighscore(game,contetn));
-    });
 
-    view.generateField(game);
-  }
-
-  void newGame(){
-    _ballTrigger = new Timer.periodic(ballSpeed, (_) => game.moveBall(this));
     view.generateField(game);
   }
 
   void updateView(List<List<GameObject>> gameField) {
     game.gameFields[game.countLevel].gameField=gameField;
     view.update(game);
-  }
-  /**
-   * Handles Game Over.
-   */
-  dynamic _gameOver() async {
-    _ballTrigger.cancel();
-
-    game._resetState();
-    view.update(game);
-
-    // Show TOP 10 Highscore
-    final highscore = await gameKey.getStates();
-    view.showHighscore(game, highscore);
-
-    // Handle save button
-    document.querySelector('#save')?.onClick?.listen((_) async {
-
-      String user = view.user;
-      String pwd  = view.password;
-      if (user?.isEmpty) { view.warning("Please provide user name."); return; }
-
-      String id = await gameKey.getUserId(user);
-      if (id == null) {
-        view.warning(
-            "User $user not found. Shall we create it?"
-                "<button id='create'>Create</button>"
-                "<button id='cancel' class='discard'>Cancel</button>"
-        );
-        document.querySelector('#cancel')?.onClick?.listen((_) => newGame());
-        document.querySelector('#create')?.onClick?.listen((_) async {
-          final usr = await gameKey.registerUser(user, pwd);
-          if (usr == null) {
-            view.warning(
-                "Could not register user $user. "
-                    "User might already exist or gamekey service not available."
-            );
-            return;
-          }
-          view.warning("");
-          final stored = await gameKey.storeState(usr['id'], {
-            'version': '0.0.2',
-            'points': game.points
-          });
-          if (stored) {
-            view.warning("${game.points} points stored for $user");
-            view.closeForm();
-            newGame();
-            return;
-          } else {
-            view.warning("Could not save highscore. Retry?");
-            return;
-          }
-        });
-      }
-
-      // User exists.
-      if (id != null) {
-        final user = await gameKey.getUser(id, pwd);
-        if (user == null) { view.warning("Wrong access credentials."); return; };
-        final stored = await gameKey.storeState(user['id'], {
-          'version': '0.0.2',
-          'points': game.points
-        });
-        if (stored) {
-          view.warning("${game.points} points stored for ${user['name']}");
-          view.closeForm();
-          newGame();
-          return;
-        } else {
-          view.warning("Could not save highscore. Retry?");
-          return;
-        }
-      }
-    });
-
-    // Handle cancel button
-    document.querySelector('#close')?.onClick?.listen((_) => newGame());
   }
 }

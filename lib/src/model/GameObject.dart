@@ -1,31 +1,27 @@
 part of brickGame;
+
 abstract class GameObject {
   ///
-  /// X position des [GameObject] auf dem Spielfeld
-  /// Zeigt immer den Mittelpunkt des [GameObject] an
+  /// X position des [MoveableObject] auf dem Spielfeld
+  /// Zeigt immer den Mittelpunkt des [MoveableObject] an
   ///
   int xPosition;
 
   ///
-  /// Y position des [GameObject] auf dem Spielfeld
-  /// Zeigt immer den Mittelpunkt des [GameObject] an
+  /// Y position des [MoveableObject] auf dem Spielfeld
+  /// Zeigt immer den Mittelpunkt des [MoveableObject] an
   ///
   int yPosition;
 
   ///
-  /// Die Breite des [GameObject]
+  /// Die Breite des [MoveableObject]
   ///
   int width;
 
   ///
-  /// Die Länge des [GameObject]
+  /// Die Länge des [MoveableObject]
   ///
   int height;
-
-  ///
-  /// Gibt an ob dieses [GameObject] noch auf der Karte ist
-  ///
-  bool destroyed=false;
 
   ///
   /// Itembuffer enthält die momentanen [Item] die sich auf diesem Feld befinden
@@ -74,20 +70,14 @@ abstract class MoveableObject extends GameObject {
   ///
   int _moveSpeed;
 
-
-
   int get moveSpeed => _moveSpeed;
-  set moveSpeed(int newSpeed) => _moveSpeed=newSpeed;
-
 
   ///
   ///
   ///
   Direction _direction;
 
-
   Direction get direction => _direction;
-  set direction(Direction newDirection) => _direction = newDirection;
 
   MoveableObject(int xPosition, int yPosition, int width, int length,
       this._moveSpeed, this._direction)
@@ -101,38 +91,22 @@ abstract class MoveableObject extends GameObject {
   void move(Direction direction, List<List<GameObject>> gameField,
       GameController controller);
 
-  ///Gibt an ob es beim nächsten schritt eine Kollision gibt
   ///
+  /// Gibt an ob beim nächsten Schritt in diese Richtung eine kollision stattfinden wird
   ///
-  /// Es wird immer angegeben ob es eine Kollision gab. Wenn ja ist der erste wert
-  /// der `true` und der zweite wert der Map gibt ein [GameObject] zurück. Falls
-  /// es keine Kollsion gab, ist der erste Wert `false` und das [GameObject] ein
-  /// [Field.
-  /// Wenn dieses Objekt dabei ist mit der Wand zu kollidieren, gibt es ebenfalls
-  /// ersten Wert ein `true` allerdings als zweiten Wert ein `null`. Dieses `null`
-  /// soll damit signalisieren, das wir mit einem nicht wirklichen [GameObject]
-  /// kolliedieren
+  /// Wenn der [Player] auf den [Ball] trifft gibt es einen `{false:Ball}` zurück
+  /// Ist das ende des Levels erreicht gibt es ein `{true:null}` zurück
+  ///
   ///
   Map<bool, GameObject> collisionAhead(Direction direction,
       List<List<GameObject>> gameField,
       [int y = 0, int x = 0]) {
     GameObject buffer;
 
-
-
-
     int xVert=0;
     int yVert=0;
     var response;
-    //Kollison für das Item
-    if(this is Item){
-      if(gameField[xPosition][yPosition+y]==Player){
-        response = {true: gameField[xPosition][yPosition+y]};
-        //Kollison mit spieler müssen nicht weiter schauen
-        return response;
-      }else return {false:gameField[xPosition][yPosition+y]};
-    }
-    //Auch quer schauen ob es kollisionen gibt
+    //Auch quer schauen ob es kolisionen gibt
     if(direction==Direction.rightDown){
       response = getValuesForDirection(Direction.right);
     }else if(direction==Direction.leftDown){
@@ -162,11 +136,9 @@ abstract class MoveableObject extends GameObject {
       }catch(e){
         print(e);
       }
-      //Kollission bälle
-      if(this is Ball && buffer is Ball){
-        return {true: buffer};
-      }
-      //Auf dem weg zum player ?
+
+
+      //Aif dem weg zum player ?
       if (buffer is Field && (_direction == Direction.down|| _direction==Direction.rightDown||_direction==Direction.leftDown)) {
         if (buffer.yPosition == gameField[0].length - 1) {
           int wallDifference = (xPosition+1) * width;
@@ -189,18 +161,17 @@ abstract class MoveableObject extends GameObject {
 
           if (wallDifference >= playerPosition &&
               wallDifference <= playerPosition + player.width) {
-            //Bei item noch kollision von PLayer aufrufen
-            buffer = player;
+              //Bei item noch kollision von PLayer aufrufen
+              buffer = player;
           }
         }
       }
     } else return {true: buffer};
 
-    //Leeres feld alles in ordnung
+
     if (buffer is Field) {
       return {false: buffer};
     }
-    //Der player darf gegen den ball fahren
     if (this is Player && buffer is Ball) {
       return {false: buffer};
     }
@@ -218,7 +189,7 @@ abstract class MoveableObject extends GameObject {
   ///
   /// Tauscht den platz zwei [GameObject] im [gameField]
   ///
-  ///
+  /// Diese Methode braucht überarbeitung für flüssige bewegungen
   /// [x] momentane Position des Objekts mit dem dieses Objekt die position tauscht
   /// [y] Dito
   ///
@@ -235,8 +206,6 @@ abstract class MoveableObject extends GameObject {
     object2.xPosition = x;
     object2.yPosition = y;
   }
-
-
 
 
 }
