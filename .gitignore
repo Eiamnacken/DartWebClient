@@ -2,6 +2,7 @@ build/
 .idea/
 doc/api/
 .pub/
+packages/
 .buildlog
 *.iml
 *.ipr
