@@ -13,7 +13,7 @@ class View {
 
   final points = querySelector("#points");
 
-  final highscore = querySelector("#highscore");
+  final highscore = querySelector("#score");
 
   final menuview = querySelector("#menuview");
 
@@ -28,6 +28,11 @@ class View {
   final help = querySelector("#help");
 
   final vanishedButton = querySelector("#button");
+
+  /* nicht noetig
+  HtmlElement get saveButton => querySelector("#save");
+  HtmlElement get closeButton => querySelector("#close");
+  */
 
   HtmlElement get startGameButton => querySelector("#startgame");
 
@@ -45,7 +50,9 @@ class View {
 
   List<List<HtmlElement>> gameFields;
 
-
+  // Saves all generated TD elements in field to
+  // avoid time intensive querySelector calls in update().
+  // Thanks to Johannes Gosch, SoSe 2015.
   void generateField(Game model) {
     final List<List<GameObject>> field = model.gameFields[model.countLevel]
         .gameField;
@@ -76,7 +83,7 @@ class View {
   }
 
   void update(Game model, {List<Map> scores: const []}) {
-    gameover.innerHtml = model.gameOver() ? "Game Over" : "";
+    gameover.innerHtml = model.gameOver() ? "Game Over!" : "";
 
     welcome.style.display = model.gameOver() ? "block" : "none";
     back.style.display = model.gameOver() ? "block" : "none";
@@ -102,6 +109,9 @@ class View {
     }
   }
 
+  ///
+  /// Setze die länge so wie breite der einzelenen [HtmlElement] im css
+  ///
   HtmlElement _setWidthAndLength(HtmlElement element,GameObject gameObject){
     if(element==null|| gameObject==null) return null;
     var width = gameObject.width;
@@ -117,6 +127,7 @@ class View {
             ..setProperty("padding-right","0px")
         ..setProperty("padding-left","0px");
     }
+    return element;
 
   }
 
@@ -152,7 +163,7 @@ class View {
                   "<input type='text' id='user' placeholder='user'>"
                   "<input type='password' id='password' placeholder='password'>"
                   "<button type='button' id='save'>Save</button>"
-                  "<button type='button' id='close' class='discard'>Close</button>"
+                  "<button type='button' id='back' class='discard'>Close</button>"
                   "</form>"
       );
     } else {

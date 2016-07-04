@@ -5,11 +5,12 @@ part of brickGame;
 /// Es ist Ziel des Spieles diese zu zerstören
 ///
 class Brick extends GameObject {
+
+
   ///
-  /// Gibt an ob dieser [Brick] ein Item enthält welches nach dem [destroy] freigelassen
-  /// wird
+  /// The [Item] this brick holds
   ///
-  bool _containsItem;
+  Item _item;
 
 
 
@@ -27,7 +28,7 @@ class Brick extends GameObject {
 
   ///
   /// Verringert die [health] um eine Stufe
-  /// Wenn der [Brick] vorher auf [red] stand wird ein `false` zurück gegeben
+  /// Wenn der [Brick] vorher auf `red` stand wird ein `false` zurück gegeben
   /// ansonsten `true`
   ///
   void decHealth(int damage, List<List<GameObject>> gameField) {
@@ -64,6 +65,10 @@ class Brick extends GameObject {
 
   String toString() {
     String buffer="";
+    //Handelt es sich um ein item special farbe ausgeben
+    if(_item!=null){
+      return "item";
+    }
     switch(health){
       case Health.brown:
       buffer="brownBrick";

@@ -5,6 +5,34 @@ part of brickGame;
 ///
 enum Direction { leftUp, leftDown, rightUp, rightDown, up, down, left, right }
 
+
+Direction getOpposit(Direction direction){
+  Direction newDirection;
+  switch(direction){
+    case Direction.down:
+      newDirection=Direction.up;
+      break;
+    case Direction.up:
+      newDirection=Direction.down;
+      break;
+    case Direction.leftDown:
+      newDirection=Direction.rightUp;
+      break;
+    case Direction.leftUp:
+      newDirection=Direction.rightDown;
+      break;
+    case Direction.rightUp:
+      newDirection=Direction.leftDown;
+      break;
+    case Direction.rightDown:
+      newDirection=Direction.leftUp;
+      break;
+    default:
+      break;
+  }
+  return newDirection;
+}
+
 ///
 /// Liefert die x und y werte für eine übergebene [Direction] als map
 ///
@@ -67,10 +95,7 @@ enum Effect {
   ///
   secondBall,
 
-  ///
-  /// Verlangsamt die Bewegungsgeschwindigkeit des [Player]
-  ///
-  slowerPLayer,
+
 
   ///
   /// Invertiert die Steuerung des [Player]
@@ -82,7 +107,6 @@ enum Effect {
   ///
   smallerPlayer
 }
-
 ///
 /// Leben eines [Brick] [green] bedeutet noch 3 treffer [yellow] 2 und [red] 1
 /// [grey] sind zerstörte [Brick]
@@ -103,18 +127,20 @@ Health getHealth(int damage, Health health) {
   } else
     return values[index];
 }
-
+///
+/// Um was für einen Brick handelt es sich
+///
 Health generateHealth(String health) {
   Health buffer;
-  if (health == "green") {
+  if (health == "gb") {
     buffer = Health.green;
-  } else if (health == "grey") {
+  } else if (health == "gyb") {
     buffer = Health.grey;
-  } else if (health == "yellow") {
+  } else if (health == "yb") {
     buffer = Health.yellow;
-  } else if (health == "red") {
+  } else if (health == "rb") {
     buffer = Health.red;
-  } else if (health == "brown") {
+  } else if (health == "bb") {
     buffer = Health.brown;
   }
   return buffer;

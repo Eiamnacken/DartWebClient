@@ -14,15 +14,15 @@ class GameKey{
   Uri _uri;
 
   //Id of the Game
-  String _gameid = "92d5e770-ff13-46dd-9d4c-09fb300bc240";
+  String _gameid = "c1b8f208-1e57-4431-bc7e-82f9db6e2780";
 
   //Secret of the game, need to authenticate the current game with the GameKey service
-  String _secret = "DontWorryAboutaThing";
+  String _secret = "DontWorryAboutaT23";
 
   //Name of the Game
-  String _nameofGame = "BrickGame";
+  String _nameofGame = "BrickGame1";
 
- /*
+  /*
     Uri of GameKey REST API
   */
   Uri get uri => this._uri;
@@ -44,7 +44,7 @@ class GameKey{
 
   //Constructor
   GameKey(String host, int port){
-    _uri = new Uri.http("$host:$port","/");
+    _uri = new Uri.http("$host:$port","");
   }
 
   /*
@@ -53,16 +53,20 @@ class GameKey{
     Return null on failure
    */
   Future<Map> registerGame(String secret, String name) async{
-    final Map newGame = {
-      "name":"$name",
-      "secret":"$secret",
-    };
     try {
-      final client = await new  HttpClient().post(uri.host, uri.port, "/game");
-      client.write(parameter(newGame));
-      HttpClientResponse response = await client.close();
-      final body = await response.transform(UTF8.decoder).join("\n");
-      return response.statusCode == 200 ? JSON.decode(body) : body;
+      final answer = await HttpRequest.request(
+          "${this._uri.resolve("/user")}",
+          method: 'POST',
+          sendData: parameter({
+            'name' : "$name",
+            'secret' : "$secret"
+          }),
+          requestHeaders: {
+            'content-type': 'application/x-www-form-urlencoded',
+            'charset': 'UTF-8'
+          }
+      );
+      return answer.status == 200 ? JSON.decode(answer.responseText) : throw answer.responseText;
     } catch (error) {
       print("GameKey.registerGame() caused an error: '$error'");
       return null;
@@ -75,10 +79,6 @@ class GameKey{
     Returns null on failure
    */
   Future<Map> registerUser(String name, String password) async{
-    final Map newUser = {
-      "name":"$name",
-      "pwd":"$password",
-    };
     try {
       final answer = await HttpRequest.request(
           "${this._uri.resolve("/user")}",
@@ -87,15 +87,14 @@ class GameKey{
             'name' : "$name",
             'pwd' : "$password"
           }),
-      requestHeaders: {
-        'content-type': 'application/x-www-form-urlencoded',
-        'charset': 'UTF-8'
-      }
+          requestHeaders: {
+            'content-type': 'application/x-www-form-urlencoded',
+            'charset': 'UTF-8'
+          }
       );
       return answer.status == 200 ? JSON.decode(answer.responseText) : throw answer.responseText;
-    } catch (error,stacktrace) {
+    } catch (error) {
       print("GameKey.registerUser() caused an error: '$error'");
-      print("$stacktrace");
       return null;
     }
   }
@@ -105,15 +104,10 @@ class GameKey{
     Returns null on failure
    */
   Future<Map> getUser(String name, String password) async{
-    final link = uri.resolve("/user/$name").resolveUri(new Uri(queryParameters:{'id':"$name",'pwd' : "$password",'byname':"true"}));
     try {
-      final client = await new HttpClient().getUrl(link);
-      HttpClientResponse response = await client.close();
-      var body = await response.transform(UTF8.decoder).join("\n");
-      //body = body.replaceAll(new RegExp('\c_'),"");
-      body = body.replaceAll("\r","");
-      body = body.replaceAll("\n","");
-      return response.statusCode == 200 ? JSON.decode(body) : null;
+      final uri = this._uri.resolve("/user/$name").resolveUri(new Uri(queryParameters: { 'pwd' : "$password" }));
+      final answer = await HttpRequest.request("$uri", method: 'GET');
+      return answer.status == 200 ? JSON.decode(answer.responseText) : throw answer.responseText;
     } catch (error) {
       print("GameKey.getUser() caused an error: '$error'");
       return null;
@@ -126,11 +120,10 @@ class GameKey{
     is available or not
    */
   Future<bool> authenticate() async{
-    final link = uri.resolve("/gamestate/$getGameId").resolveUri(new Uri(queryParameters:{'secret':"$getSecret"}));
     try {
-      final client = await new HttpClient().getUrl(link);
-      HttpClientResponse response = await client.close();
-      return response.statusCode == 200 ? true : false;
+      final uri = this._uri.resolve("/game/$getGameId").resolveUri(new Uri(queryParameters: { 'secret' : "$getSecret" }));
+      final answer = await HttpRequest.request("$uri", method: 'GET');
+      return answer.status == 200 ? true : false;
     } catch (error) {
       print("GameKey.authenticate() caused an error: '$error");
       return false;
@@ -159,13 +152,8 @@ class GameKey{
    */
   Future<List<Map>> listUsers() async{
     try {
-      final client = await new HttpClient().get(uri.host, uri.port, "/users");
-      HttpClientResponse response = await client.close();
-      var body = await response.transform(UTF8.decoder).join("\n");
-      //body = body.replaceAll(new RegExp('\c_'),"");
-      body = body.replaceAll("\r","");
-      body = body.replaceAll("\n","");
-      return response.statusCode == 200 ? JSON.decode(body) : null;
+      final answer = await HttpRequest.request("${this._uri.resolve("/users")}", method: 'GET');
+      return JSON.decode(answer.responseText);
     } catch (error) {
       print("GameKey.listUsers() caused an error: '$error'");
       return null;
@@ -178,13 +166,8 @@ class GameKey{
    */
   Future<List<Map>> listGames() async{
     try {
-      final client = await new HttpClient().get(uri.host, uri.port, "/games");
-      HttpClientResponse response = await client.close();
-      var body = await response.transform(UTF8.decoder).join("\n");
-      //body = body.replaceAll(new RegExp('\c_'),"");
-      body = body.replaceAll("\r","");
-      body = body.replaceAll("\n","");
-      return response.statusCode == 200 ? JSON.decode(body) : null;
+      final answer = await HttpRequest.request("${this._uri.resolve("/games")}", method: 'GET');
+      return JSON.decode(answer.responseText);
     } catch (error) {
       print("GameKey.listGames() caused an error: '$error'");
       return null;
@@ -196,18 +179,10 @@ class GameKey{
     Returns null if no game states exist for this game
    */
   Future<List<Map>> getStates() async{
-    final link = uri.resolve("/gamestate/$getGameId").resolveUri(new Uri(queryParameters:{'secret':"$getSecret"}));
     try {
-      final client = await new HttpClient().getUrl(link);
-      HttpClientResponse response = await client.close();
-      var body = await response.transform(UTF8.decoder).join("\n");
-      //body = body.replaceAll(new RegExp('\c_'),"");
-      //body = body.replaceAll("\r","");
-      //body = body.replaceAll("\n","");
-      //the empty body.length is 4
-      //it doesn't work with body.isEmpty or body.length != null etc
-      if (body.length>4) return JSON.decode(body);
-      return null;
+      final uri = this._uri.resolve("/gamestate/$getGameId").resolveUri(new Uri(queryParameters: { 'secret' : "$getSecret" }));
+      final answer = await HttpRequest.request("$uri", method: 'GET');
+      return JSON.decode(answer.responseText);
     } catch (error) {
       print("GameKey.getStates() caused an error: '$error'");
       return null;
@@ -218,13 +193,20 @@ class GameKey{
     Returns a JSON list with the saved states of this user
    */
   Future<bool> storeState(String id, Map state) async{
-    final link = uri.resolve("/gamestate/$getGameId/$id").resolveUri(new Uri(queryParameters:{'secret':"$getSecret",
-      'state':"${JSON.encode(state)}"}));
     try {
-      final client = await new HttpClient().postUrl(link);
-      HttpClientResponse response = await client.close();
-      var body = await response.transform(UTF8.decoder).join("\n");
-      return response.statusCode == 200 ? true : false;
+      final answer = await HttpRequest.request(
+          "${this._uri.resolve("/gamestate/$getGameId/$id")}",
+          method: 'POST',
+          sendData: parameter({
+            'secret' : "$_secret",
+            'state' : "${JSON.encode(state)}",
+          }),
+          requestHeaders: {
+            'content-type': 'application/x-www-form-urlencoded',
+            'charset': 'UTF-8'
+          }
+      );
+      return answer.status == 200 ? true : throw answer.responseText;
     } catch (error) {
       print("GameKey.storeState() caught an error: '$error'");
       return false;
