@@ -22,10 +22,7 @@ class Level {
   ///
   int _countPositiveItems;
 
-  ///
-  /// Anzahl der negativen [Item] die dieses Level enthält
-  ///
-  int _countNegativeItems;
+
 
   ///
   /// Enthält das gesamte Spielfeld als 2d Liste
@@ -68,7 +65,6 @@ class Level {
     _height = int.parse(jsonLevel['levelHeight'].toString());
     _length = int.parse(jsonLevel['levelLength'].toString());
     _countPositiveItems = int.parse(jsonLevel['countPosItems'].toString());
-    _countNegativeItems = int.parse(jsonLevel['countNegItems'].toString());
     playerHeight = int.parse(jsonLevel['playerHeight'].toString());
     playerLength = int.parse(jsonLevel['playerLength'].toString());
     brickHeight = int.parse(jsonLevel['brickHeight'].toString());

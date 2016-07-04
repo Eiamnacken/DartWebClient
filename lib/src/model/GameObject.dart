@@ -81,7 +81,7 @@ abstract class MoveableObject extends GameObject {
 
 
   ///
-  ///
+  /// Die richtung in die das Object sich im moment bewegt
   ///
   Direction _direction;
 

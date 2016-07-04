@@ -105,7 +105,9 @@ class Game {
   Player _getPlayer() {
     return gameFields[countLevel].player;
   }
-
+  ///
+  /// Prüfen ob das Spiel zu ende ist
+  ///
   bool gameOver() {
     bool gameOver=true;
     gameFields[countLevel].balls.forEach((b){

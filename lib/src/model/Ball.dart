@@ -134,7 +134,6 @@ class Ball extends MoveableObject {
         response[true].collision(gameField, this);
         if(response[true] is Brick){
           controller.game.increasePoints(response[true].health);
-          return;
         }
 
       }

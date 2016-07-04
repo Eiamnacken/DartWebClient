@@ -34,7 +34,8 @@ class Brick extends GameObject {
   void decHealth(int damage, List<List<GameObject>> gameField) {
     health = getHealth(damage, health);
     if (health == Health.grey) {
-      gameField[xPosition][yPosition] = new Field(xPosition,yPosition,width,height);
+      destroy(gameField);
+
     }
 
   }
@@ -43,16 +44,14 @@ class Brick extends GameObject {
   /// Zerstört diesen [Brick] und prüft ob es ein [Item] enthält
   /// Gibt ein [Item] zurück wenn es eines enthält ansonsten null
   ///
-  Item destroy() {
-    return _release();
+  void destroy(List<List<GameObject>> gameField) {
+    gameField[xPosition][yPosition] = new Field.second(xPosition,yPosition);
+    if(_item!=null){
+      _item.activateItem();
+    }
   }
 
-  ///
-  /// Legt ein neues [Item] an und gibt diese zurück
-  ///
-  Item _release() {
-    return null;
-  }
+
 
   @override
   void collision(List<List<GameObject>> gameField, GameObject collisionObject) {
