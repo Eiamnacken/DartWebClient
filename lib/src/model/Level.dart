@@ -111,7 +111,7 @@ class Level {
       Ball ballBuffer = balls.first;
       Direction ballDirection;
       while (counter != 0) {
-        Brick objectBuffer = bricks[randomNumber.nextInt(bricks.length - 1)];
+        Brick objectBuffer = bricks[randomNumber.nextInt(bricks.length )];
 
         if (objectBuffer._item == null) {
           for (int i = 0; i < 3; i++) {
