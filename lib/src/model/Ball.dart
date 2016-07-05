@@ -98,13 +98,12 @@ class Ball extends MoveableObject {
     int playerMiddle = ((object.xPosition * this.width) + 1);
     //Größe des Balles
     int ballPosition = this.xPosition * this.width;
-    if (ballPosition >= playerMiddle &&
-        ballPosition <= playerMiddle + playerPieces) {
+    if (ballPosition >= playerMiddle&& ballPosition <=playerMiddle+playerPieces) {
       direction = Direction.up;
     } else if ((ballPosition >= playerMiddle - playerPieces &&
         ballPosition < playerMiddle)|| ballPosition == playerMiddle-playerPieces) {
       direction = Direction.leftUp;
-    } else direction = Direction.rightUp;
+    } else if(ballPosition <= (playerMiddle+(playerPieces*2))+1 && ballPosition > playerMiddle+playerPieces)direction = Direction.rightUp;
   }
 
   @override
