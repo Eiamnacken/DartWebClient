@@ -45,6 +45,7 @@ class GameController {
 
   Timer _gameKeyTrigger;
 
+
   GameController() {
     try {
       _gameKeyTrigger = new Timer.periodic(gameKeyCheck, (_) async {
@@ -66,12 +67,7 @@ class GameController {
 
 
     view.startButton.onClick.listen((_) {
-      if (_ballTrigger != null) _ballTrigger.cancel();
-      bool won = game.won();
-      bool gameOver = game.gameOver();
-      if(!won||gameOver){
-        _gameOver();
-      }else newGame();
+      newGame();
     });
 
     view.startGameButton.onClick.listen((_) {
@@ -127,17 +123,20 @@ class GameController {
     view.generateField(game);
   }
 
+  void resetGame(){
+    game = new Game();
+  }
+
   //Erstellt ein neues Spiel
   void newGame(){
+    _ballTrigger=new Timer.periodic(ballSpeed, (_)=> game.moveBall(this));
     view.closeForm();
-    game._resetState();
-    _ballTrigger = new Timer.periodic(ballSpeed, (_) => game.moveBall(this));
     view.generateField(game);
   }
 
   void updateView(List<List<GameObject>> gameField) {
     game.gameFields[game.countLevel].gameField=gameField;
-    if(game.gameOver()||!game.won()){
+    if((game.gameOver()||game.gameEnds())){
       _gameOver();
     }else{
       view.update(game);
@@ -216,6 +215,6 @@ class GameController {
     });
 
     // Handle cancel button
-    document.querySelector('#close')?.onClick?.listen((_) => newGame());
+    document.querySelector('#close')?.onClick?.listen((_){resetGame();view.closeForm();});
   }
 }

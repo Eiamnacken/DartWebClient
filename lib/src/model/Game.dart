@@ -55,7 +55,6 @@ class Game {
   ///
   void moveBall(GameController controller) {
     List balls = gameFields[countLevel].balls;
-    if (balls.isNotEmpty) {
         balls.forEach((ball) {
           //Nur aktivierte bälle bewegen
           if (ball.activated) {
@@ -67,10 +66,10 @@ class Game {
               return;
             }
           }
-          if (!won()) newLevel();
+          if (won()) newLevel();
         });
         //Verhindere absturz bei wegnehmen von bällen
-      }
+
 
   }
 
@@ -122,7 +121,7 @@ class Game {
   /// `Health.grey` sind
   ///
   bool won() {
-    return gameFields[countLevel].bricks.any((brick)=> brick.health!=Health.grey);
+    return !gameFields[countLevel].bricks.any((brick)=> brick.health!=Health.grey);
   }
 
   ///
@@ -130,8 +129,6 @@ class Game {
   ///
   void newLevel() {
     if(countLevel != gameFields.length - 1) {
-      var balls = gameFields[countLevel].balls;
-      balls.removeRange(1,balls.length);
       countLevel++;
     }
 
@@ -142,7 +139,17 @@ class Game {
     if(health==Health.brown) return;
     points += 10;
   }
-
+  ///
+  /// Ist das Spiel zu ende?
+  ///
+  bool gameEnds(){
+    if(countLevel==gameFields.length){
+        if(won()){
+          return true;
+        }
+      }
+      return false;
+  }
 
 
   ///
@@ -166,6 +173,13 @@ class Game {
   /// Setzt alle werte auf den Standard zurück
   ///
   void _resetState() {
+    gameFields.forEach((level){
+      level.balls.forEach((ball){
+        ball.activated=false;
+        ball.destroyed=false;
+      });
+      level.balls.first.activated=true;
+    });
     countLevel=0;
     points=0;
   }

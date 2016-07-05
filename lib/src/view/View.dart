@@ -80,12 +80,9 @@ class View {
 
   void update(Game model, {List<Map> scores: const []}) {
 
-    highscore.innerHtml = model.gameOver() ? generateHighscore(scores) : "";
     welcome.style.display = model.gameOver() ? "block" : "none";
     back.style.display = model.gameOver() ? "block" : "none";
     vanishedButton.style.display = model.gameOver() ? "none" : "block";
-
-
     level.innerHtml="Level: ${model.countLevel + 1}";
     points.innerHtml = "Points: ${model.points}";
 
