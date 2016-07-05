@@ -238,7 +238,7 @@ class View {
         "<div id='highscorewarning'></div>";
     if(score>0&&scores!=null&&(scores.isEmpty || scores.last['state']['points'] < score || scores.length < 10)) {
       overlay.appendHtml(
-          this.generateHighscore(scores, score: score) +
+          this.generateHighscore(scores.sublist(0,10), score: score) +
               "<form id='highscoreform'>"
                   "<input type='text' id='user' placeholder='user'>"
                   "<input type='password' id='password' placeholder='password'>"
@@ -247,7 +247,7 @@ class View {
                   "</form>"
       );
     } else {
-      overlay.appendHtml(this.generateHighscore(scores, score: score));
+      overlay.appendHtml(this.generateHighscore(scores.sublist(0,10), score: score));
       overlay.appendHtml("<button type='button' id='close' class='discard'>Close</button>");
     }
   }

@@ -169,7 +169,7 @@ class GameController {
 
       String user = view.user;
       String pwd  = view.password;
-      if (user?.isEmpty) { view.highscoreMessage("Please provide user name."); return; }
+      if (user?.isEmpty) { view.highscoreMessage("Please provide user name."); return;}
 
       String id = await gameKey.getUserId(user);
       if (id == null) {
