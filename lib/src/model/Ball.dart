@@ -46,7 +46,7 @@ class Ball extends MoveableObject {
   }
 
   ///
-  /// Wird nur von Objekten aufgerufen die bei ihrer eigenen bewegung mit dem [Ball kolidieren
+  /// Wird nur von Objekten aufgerufen die bei ihrer eigenen bewegung mit dem [Ball] kollidieren
   ///
   void collision(List<List<GameObject>> gameField, GameObject collisionObject) {
     if(collisionObject is Ball){
@@ -133,12 +133,8 @@ class Ball extends MoveableObject {
       if (response[true] != null) {
         response[true].collision(gameField, this);
         if(response[true] is Brick){
-          Brick brickBuffer = response[true];
-          brickBuffer.collision(gameField,this);
-          controller.game.increasePoints(brickBuffer.health);
-          return;
+          controller.game.increasePoints(response[true].health);
         }
-
       }
       //Weiter mit der neuen richtung des Objektes die geändert wurde
       move(this.direction, gameField, controller);

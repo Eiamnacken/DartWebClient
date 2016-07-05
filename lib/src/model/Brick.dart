@@ -67,6 +67,9 @@ class Brick extends GameObject {
 
   String toString() {
     String buffer="";
+    if(_item!=null){
+      return "item";
+    }
     switch(health){
       case Health.brown:
         buffer="brownBrick";

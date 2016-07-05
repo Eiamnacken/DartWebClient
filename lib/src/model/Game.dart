@@ -120,8 +120,8 @@ class Game {
   }
 
   bool won() {
-    if (gameFields[countLevel].bricks.length == 0 &&
-        gameFields[countLevel].balls.length > 0) {
+    if (gameFields[countLevel].bricks.isNotEmpty &&
+        !gameOver()) {
       return true;
     }
     return false;

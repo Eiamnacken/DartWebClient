@@ -231,6 +231,11 @@ input::-moz-placeholder { color: lightgray; font-style: italic; }
   border: none !important;
   border-spacing: 0px; }
 
+.item {
+  background: white !important;
+  border: none !important;
+  border-spacing: 0px; }
+
 .field {
   background: inherit !important;
   border: none !important;
