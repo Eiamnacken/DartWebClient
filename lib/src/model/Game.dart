@@ -67,7 +67,7 @@ class Game {
               return;
             }
           }
-          if (won()) newLevel();
+          if (!won()) newLevel();
         });
         //Verhindere absturz bei wegnehmen von bällen
       }
@@ -115,18 +115,14 @@ class Game {
         gameOver=false;
       }
     });
-    if(gameFields[countLevel].balls.isEmpty){
-      gameOver=true;
-    }
     return gameOver;
   }
-
+  ///
+  /// Wurde das Spiel gewonnen kann geprüft werden in dem alle  [Brick] nicht
+  /// `Health.grey` sind
+  ///
   bool won() {
-    if (gameFields[countLevel].bricks.isNotEmpty &&
-        !gameOver()) {
-      return true;
-    }
-    return false;
+    return gameFields[countLevel].bricks.any((brick)=> brick.health!=Health.grey);
   }
 
   ///
@@ -162,7 +158,6 @@ class Game {
       level.readLevel(jsonLevel);
       gameFields.add(level);
     }
-    return await true;
   }
 
 

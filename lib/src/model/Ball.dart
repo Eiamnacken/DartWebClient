@@ -135,10 +135,9 @@ class Ball extends MoveableObject {
         if(response[true] is Brick){
           controller.game.increasePoints(response[true].health);
         }
-
       }
       //Weiter mit der neuen richtung des Objektes die geändert wurde
-      //move(this.direction, gameField, controller);
+      move(this.direction, gameField, controller);
     }
   }
 

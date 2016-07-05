@@ -67,7 +67,9 @@ class GameController {
 
     view.startButton.onClick.listen((_) {
       if (_ballTrigger != null) _ballTrigger.cancel();
-      if(game.won()||game.gameOver()) {
+      bool won = game.won();
+      bool gameOver = game.gameOver();
+      if(!won||gameOver){
         _gameOver();
       }else newGame();
     });
@@ -125,22 +127,27 @@ class GameController {
     view.generateField(game);
   }
 
+  //Erstellt ein neues Spiel
   void newGame(){
+    view.closeForm();
+    game._resetState();
     _ballTrigger = new Timer.periodic(ballSpeed, (_) => game.moveBall(this));
     view.generateField(game);
   }
 
   void updateView(List<List<GameObject>> gameField) {
     game.gameFields[game.countLevel].gameField=gameField;
-    view.update(game);
+    if(game.gameOver()||!game.won()){
+      _gameOver();
+    }else{
+      view.update(game);
+    }
   }
   /**
    * Handles Game Over.
    */
   dynamic _gameOver() async {
     _ballTrigger.cancel();
-
-    game._resetState();
     view.update(game);
 
     // Show TOP 10 Highscore

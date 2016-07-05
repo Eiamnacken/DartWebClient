@@ -28,7 +28,6 @@ class View {
   final help = querySelector("#help");
 
   final vanishedButton = querySelector("#button");
-
   /* nicht noetig
   HtmlElement get saveButton => querySelector("#save");
   HtmlElement get closeButton => querySelector("#close");
@@ -50,9 +49,6 @@ class View {
 
   List<List<HtmlElement>> gameFields;
 
-  // Saves all generated TD elements in field to
-  // avoid time intensive querySelector calls in update().
-  // Thanks to Johannes Gosch, SoSe 2015.
   void generateField(Game model) {
     final List<List<GameObject>> field = model.gameFields[model.countLevel]
         .gameField;
@@ -83,15 +79,14 @@ class View {
   }
 
   void update(Game model, {List<Map> scores: const []}) {
-    gameover.innerHtml = model.gameOver() ? "Game Over!" : "";
 
+    highscore.innerHtml = model.gameOver() ? generateHighscore(scores) : "";
     welcome.style.display = model.gameOver() ? "block" : "none";
     back.style.display = model.gameOver() ? "block" : "none";
     vanishedButton.style.display = model.gameOver() ? "none" : "block";
 
 
     level.innerHtml="Level: ${model.countLevel + 1}";
-    highscore.innerHtml = model.gameOver() ? generateHighscore(scores) : "";
     points.innerHtml = "Points: ${model.points}";
 
     // Updates the field
@@ -163,7 +158,7 @@ class View {
                   "<input type='text' id='user' placeholder='user'>"
                   "<input type='password' id='password' placeholder='password'>"
                   "<button type='button' id='save'>Save</button>"
-                  "<button type='button' id='back' class='discard'>Close</button>"
+                  "<button type='button' id='close' class='discard'>Close</button>"
                   "</form>"
       );
     } else {
