@@ -14,13 +14,13 @@ class GameKey{
   Uri _uri;
 
   //Id of the Game
-  String _gameid = "c1b8f208-1e57-4431-bc7e-82f9db6e2780";
+  String _gameid = "783778735";
 
   //Secret of the game, need to authenticate the current game with the GameKey service
-  String _secret = "DontWorryAboutaT23";
+  String _secret = "DontWorryAboutaThing";
 
   //Name of the Game
-  String _nameofGame = "BrickGame1";
+  String _nameofGame = "BrickGame";
 
   /*
     Uri of GameKey REST API

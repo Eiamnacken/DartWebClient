@@ -195,6 +195,7 @@ class GameController {
           });
           if (stored) {
             view.higscoreMessage("${game.points} points stored for $user");
+            resetGame();
             newGame();
             return;
           } else {
