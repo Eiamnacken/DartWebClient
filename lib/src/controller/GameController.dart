@@ -38,8 +38,8 @@ class GameController {
 
   final View view = new View();
 
-//  GameKey gameKey = new GameKey("212.201.22.169", 50001);
-  GameKey gameKey = new GameKey("localhost",4000);
+  GameKey gameKey = new GameKey("212.201.22.169", 50001);
+///  GameKey gameKey = new GameKey("127.0.0.1",8080);
 
   Timer _ballTrigger;
 
@@ -67,26 +67,27 @@ class GameController {
 
 
     view.startButton.onClick.listen((_) {
+      _ballTrigger = new Timer.periodic(ballSpeed, (_)=> game.moveBall(this));
       newGame();
     });
 
     view.startGameButton.onClick.listen((_) {
-      view.menuview.style.display = "none";
-      view.gameview.style.display = "block";
+      view.menuView.style.display = "none";
+      view.gameView.style.display = "block";
     });
 
     view.backMenuButton.onClick.listen((_) {
-      view.menuview.style.display = "block";
-      view.gameview.style.display = "none";
+      view.menuView.style.display = "block";
+      view.gameView.style.display = "none";
     });
 
     view.helpButton.onClick.listen((_) {
-      view.menuview.style.display = "none";
+      view.menuView.style.display = "none";
       view.help.style.display = "block";
     });
 
     view.cancelButton.onClick.listen((_) {
-      view.menuview.style.display = "block";
+      view.menuView.style.display = "block";
       view.help.style.display = "none";
     });
 
@@ -136,7 +137,6 @@ class GameController {
 
   //Erstellt ein neues Spiel
   void newGame(){
-    _ballTrigger=new Timer.periodic(ballSpeed, (_)=> game.moveBall(this));
     view.closeForm();
     view.generateField(game);
   }
@@ -169,11 +169,11 @@ class GameController {
 
       String user = view.user;
       String pwd  = view.password;
-      if (user?.isEmpty) { view.higscoreMessage("Please provide user name."); return; }
+      if (user?.isEmpty) { view.highscoreMessage("Please provide user name."); return;}
 
       String id = await gameKey.getUserId(user);
       if (id == null) {
-        view.higscoreMessage(
+        view.highscoreMessage(
             "User $user not found. Shall we create it?"
                 "<button id='create'>Create</button>"
                 "<button id='cancel' class='discard'>Cancel</button>"
@@ -182,24 +182,23 @@ class GameController {
         document.querySelector('#create')?.onClick?.listen((_) async {
           final usr = await gameKey.registerUser(user, pwd);
           if (usr == null) {
-            view.higscoreMessage(
+            view.highscoreMessage(
                 "Could not register user $user. "
                     "User might already exist or gamekey service not available."
             );
             return;
           }
-          view.higscoreMessage("");
+          view.highscoreMessage("");
           final stored = await gameKey.storeState(usr['id'], {
             'version': '0.0.2',
             'points': game.points
           });
           if (stored) {
-            view.higscoreMessage("${game.points} points stored for $user");
-            resetGame();
+            view.highscoreMessage("${game.points} points stored for $user");
             newGame();
             return;
           } else {
-            view.higscoreMessage("Could not save highscore. Retry?");
+            view.highscoreMessage("Could not save highscore. Retry?");
             return;
           }
         });
@@ -208,18 +207,16 @@ class GameController {
       // User exists.
       if (id != null) {
         final user = await gameKey.getUser(id, pwd);
-        if (user == null) { view.higscoreMessage("Wrong access credentials."); return; };
+        if (user == null) { view.highscoreMessage("Wrong access credentials."); return; };
         final stored = await gameKey.storeState(user['id'], {
           'version': '0.0.2',
           'points': game.points
         });
         if (stored) {
-          view.higscoreMessage("${game.points} points stored for ${user['name']}");
-          resetGame();
-          newGame();
+          view.highscoreMessage("${game.points} points stored for ${user['name']}");
           return;
         } else {
-          view.higscoreMessage("Could not save highscore. Retry?");
+          view.highscoreMessage("Could not save highscore. Retry?");
           return;
         }
       }

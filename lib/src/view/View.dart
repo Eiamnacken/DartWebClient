@@ -1,54 +1,120 @@
 part of brickGame;
 
+///
+/// A [View] object interacts with the DOM tree
+/// to reflect the actual game state to the user.
 class View {
+
+  ///
+  /// Element with id '#warningoverlay' of the DOM tree
+  /// Used to display general warnings
   final warningoverlay = querySelector("#warningoverlay");
 
-  final title = querySelector("#title");
-
-  final level = querySelector("#level");
-
-  final gameover = querySelector("#gameover");
-
-  final game = querySelector("#game");
-
-  final points = querySelector("#points");
-
-  final highscore = querySelector("#score");
-
-  final menuview = querySelector("#menuview");
-
-  final gameview = querySelector("#gameview");
-
-  final welcome = querySelector("#welcome");
-
+  ///
+  /// Element with id '#overlay' of the DOM tree
+  /// Used to display the highscore overlay.
   final overlay = querySelector("#overlay");
 
-  final back = querySelector("#back");
+  ///
+  /// Element with id '#title' of the DOM tree
+  /// The title of the game
+  final title = querySelector("#title");
 
+  ///
+  /// Element with id '#level' of the DOM tree
+  /// current game level
+  final level = querySelector("#level");
+
+  ///
+  /// Element with id '#gameover' of the DOM tree
+  /// Indicates that the game is over
+  final gameover = querySelector("#gameover");
+
+  ///
+  /// Element with id '#game' of the DOM tree
+  /// Used to visualize the field of [Game] as a HTML table
+  final game = querySelector("#game");
+
+  ///
+  /// Element with id '#points' of the DOM tree
+  /// Used to indicate how many points a user has actually collected
+  final points = querySelector("#points");
+
+  ///
+  /// Element with id '#score' of the DOM tree
+  /// Shown only if game is not running
+  final highscore = querySelector("#score");
+
+  ///
+  /// Element with id '#beforeaftergame' of the DOM tree
+  /// Shown only if game is not running.
+  final startHigh = querySelector("#startHigh");
+
+  ///
+  /// Element with id '#menuview' of the DOM tree
+  /// Start menu of the game
+  final menuView = querySelector("#menuview");
+
+  ///
+  /// Element with id 'gameview' of the DOM tree
+  /// Game menu of the game
+  /// Shown only if user activates 'Game' button in [menuView]
+  final gameView = querySelector("#gameview");
+
+  ///
+  /// Element with id 'back' of the DOM tree
+  /// 'Menu' button [BackMenuButton] in [gameView] to change to [menuView]
+  /// Shown only game is not running
+  final backMenu = querySelector("#back");
+
+  ///
+  /// Element with id '#help' of the DOM tree
+  /// Help menu of the game
+  /// Shown only if user activates 'How To' button [helpButton]
   final help = querySelector("#help");
 
-  final vanishedButton = querySelector("#button");
-  /* nicht noetig
-  HtmlElement get saveButton => querySelector("#save");
-  HtmlElement get closeButton => querySelector("#close");
-  */
+  ///
+  /// Element with id '#button' of the DOM tree
+  /// Shows only left/right button if the game is running
+  final vanishedLeftRightButton = querySelector("#button");
 
+  ///
+  /// Button to change from [menuView] to [gameView]
   HtmlElement get startGameButton => querySelector("#startgame");
 
+  ///
+  /// Start button of the game
   HtmlElement get startButton => querySelector("#start");
 
+  ///
+  /// Button to change from [gameView] to [menuView]
   HtmlElement get backMenuButton => querySelector("#backmenu");
 
+  ///
+  /// Button to change from [menuView] to [help]
   HtmlElement get helpButton => querySelector("#howto");
 
+  ///
+  /// Button to change from [help] to [menuView]
   HtmlElement get cancelButton => querySelector("#cancelbutton");
 
+  ///
+  /// Button to move the player right
   HtmlElement get rightButton => querySelector("#rightbutton");
 
+  ///
+  /// Button to move the player left
   HtmlElement get leftButton => querySelector("#leftbutton");
 
+  ///
+  /// Contains all TD Elements of the field
   List<List<HtmlElement>> gameFields;
 
+  ///
+  ///Generates the field acording to [model] state.
+  ///A HTML table (n x m) is generated and inserted
+  /// into the [game] element of the DOM tree
+  ///
   void generateField(Game model) {
     final List<List<GameObject>> field = model.gameFields[model.countLevel]
         .gameField;
@@ -67,6 +133,9 @@ class View {
     }
     game.innerHtml = table;
 
+    // Saves all generated TD elements in field to
+    // avoid time intensive querySelector calls in update().
+    // Thanks to Johannes Gosch, SoSe 2015.
     gameFields = new List<List<HtmlElement>>(field.length);
     for (int row = 0; row < field.length; row++) {
       gameFields[row] = [];
@@ -78,8 +147,24 @@ class View {
     }
   }
 
+  /// Updates the view according ot the [model] state
+  ///
+  /// [level] are updated according to the [model] state.
+  /// [points] are updated according to the [model] state.
+  /// [startButton] is shown according to the stopped/running state of the [model].
+  /// [gameover] is shown when [model] indicates game over state.
+  /// [highscore] is presented to scores, per default no highscore is shown.
+  /// [startHigh] is shown according to the stopped/running state of the [model].
+  /// [backMenuButton] is shown according to the stopped/running state of the [model].
+  /// [vanishedLeftRightButton] is shown according to the stopped/running state of the [model].
+  /// Field is shown according to actual field state of [model].
+  ///
   void update(Game model, {List<Map> scores: const []}) {
+    gameover.innerHtml = model.gameOver() ? "Game Over!" : "";
 
+    startHigh.style.display = model.gameOver() ? "block" : "none";
+    backMenu.style.display = model.gameOver() ? "block" : "none";
+    vanishedLeftRightButton.style.display = model.gameOver() ? "none" : "block";
 
     level.innerHtml="Level: ${model.countLevel + 1}";
     points.innerHtml = "Points: ${model.points}";
@@ -100,7 +185,7 @@ class View {
   }
 
   ///
-  /// Setze die länge so wie breite der einzelenen [HtmlElement] im css
+  /// Adjusts the width and height of [HtmlElement] in css
   ///
   HtmlElement _setWidthAndLength(HtmlElement element,GameObject gameObject){
     if(element==null|| gameObject==null) return null;
@@ -114,14 +199,12 @@ class View {
     }else{
       element.style..setProperty("width","${width}px")
         ..setProperty("height","${gameObject.height}px")
-            ..setProperty("padding-right","0px")
+        ..setProperty("padding-right","0px")
         ..setProperty("padding-left","0px");
     }
     return element;
 
   }
-
-  closeForm() => overlay.innerHtml = "";
 
   void warning(String message) {
     document
@@ -129,9 +212,12 @@ class View {
         .innerHtml = message;
   }
 
-  void higscoreMessage(String message){
+  ///
+  /// Used to display a highscore message
+  ///
+  void highscoreMessage(String message){
     document.querySelector('#highscorewarning')
-    .innerHtml=message;
+        .innerHtml=message;
   }
 
   String generateHighscore(List<Map> scores, { int score: 0 }) {
@@ -141,19 +227,17 @@ class View {
   }
 
   void showHighscore(Game model, List<Map> scores) {
-
     if (overlay.innerHtml != "") return;
     final score = model.points;
     document.querySelector('#title').innerHtml='';
     overlay.innerHtml =
     "<div id='highscore'>"
-        "   <h1>Highscore</h1>"
+        "   <h3>Highscore</h3>"
         "</div>"
         "<div id='highscorewarning'></div>";
-    print(scores);
-     if(score>0&&scores!=null&&(scores.isEmpty || scores.last['state']['points']<score || scores.length < 10)) {
+    if(score>0&&scores!=null&&(scores.isEmpty || scores.sublist(0,10).last['state']['points'] < score || scores.length < 10)) {
       overlay.appendHtml(
-          this.generateHighscore(scores, score: score) +
+          this.generateHighscore(scores.sublist(0,10), score: score) +
               "<form id='highscoreform'>"
                   "<input type='text' id='user' placeholder='user'>"
                   "<input type='password' id='password' placeholder='password'>"
@@ -162,12 +246,12 @@ class View {
                   "</form>"
       );
     } else {
-      overlay.appendHtml(this.generateHighscore(scores, score: score));
+      overlay.appendHtml(this.generateHighscore(scores.sublist(0,10), score: score));
       overlay.appendHtml("<button type='button' id='close' class='discard'>Close</button>");
     }
   }
 
-
+  closeForm() => overlay.innerHtml = "";
 
   /**
    * Gets the user input from the highscore form.
