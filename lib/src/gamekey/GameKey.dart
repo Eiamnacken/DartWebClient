@@ -14,7 +14,7 @@ class GameKey{
   Uri _uri;
 
   //Id of the Game
-  String _gameid = "783778735";
+  String _gameid = "886436906";
 
   //Secret of the game, need to authenticate the current game with the GameKey service
   String _secret = "DontWorryAboutaThing";
@@ -54,12 +54,14 @@ class GameKey{
    */
   Future<Map> registerGame(String secret, String name) async{
     try {
+
       final answer = await HttpRequest.request(
-          "${this._uri.resolve("/user")}",
+          "${this._uri.resolve("/game")}",
           method: 'POST',
           sendData: parameter({
             'name' : "$name",
             'secret' : "$secret"
+
           }),
           requestHeaders: {
             'content-type': 'application/x-www-form-urlencoded',
@@ -93,8 +95,9 @@ class GameKey{
           }
       );
       return answer.status == 200 ? JSON.decode(answer.responseText) : throw answer.responseText;
-    } catch (error) {
+    } catch (error,stacktrace) {
       print("GameKey.registerUser() caused an error: '$error'");
+      print("$stacktrace");
       return null;
     }
   }

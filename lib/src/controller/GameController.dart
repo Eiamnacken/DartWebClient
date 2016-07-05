@@ -38,8 +38,8 @@ class GameController {
 
   final View view = new View();
 
-  GameKey gameKey = new GameKey("212.201.22.169", 50001);
-///  GameKey gameKey = new GameKey("127.0.0.1",8080);
+//  GameKey gameKey = new GameKey("212.201.22.169", 50001);
+  GameKey gameKey = new GameKey("localhost",4000);
 
   Timer _ballTrigger;
 
@@ -215,7 +215,6 @@ class GameController {
         });
         if (stored) {
           view.higscoreMessage("${game.points} points stored for ${user['name']}");
-          view.closeForm();
           resetGame();
           newGame();
           return;
