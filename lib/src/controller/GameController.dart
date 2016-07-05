@@ -229,7 +229,7 @@ class GameController {
     document.querySelector('#close')?.onClick?.listen((_){
       resetGame();
       view.closeForm();
-      document.querySelector('#title').innerHtml='';
     });
+    document.querySelector('#title').innerHtml='';
   }
 }
