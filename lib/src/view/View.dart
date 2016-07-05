@@ -227,7 +227,6 @@ class View {
   }
 
   void showHighscore(Game model, List<Map> scores) {
-
     if (overlay.innerHtml != "") return;
     final score = model.points;
     document.querySelector('#title').innerHtml='';
@@ -236,7 +235,7 @@ class View {
         "   <h3>Highscore</h3>"
         "</div>"
         "<div id='highscorewarning'></div>";
-    if(score>0&&scores!=null&&(scores.isEmpty || scores.last['state']['points'] < score || scores.length < 10)) {
+    if(score>0&&scores!=null&&(scores.isEmpty || scores.sublist(0,10).last['state']['points'] < score || scores.length < 10)) {
       overlay.appendHtml(
           this.generateHighscore(scores.sublist(0,10), score: score) +
               "<form id='highscoreform'>"
