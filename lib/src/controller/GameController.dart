@@ -117,7 +117,13 @@ class GameController {
 
 
     view.highscore.onClick.listen((_){
-      gameKey.getStates().then((contetn)=>view.showHighscore(game,contetn));
+      gameKey.getStates().then((contetn){
+        view.showHighscore(game,contetn);
+        // Handle cancel button
+        document.querySelector('#close')?.onClick?.listen((_){
+          view.closeForm();
+        });
+      });
     });
 
     view.generateField(game);
@@ -142,6 +148,10 @@ class GameController {
       view.update(game);
     }
   }
+
+
+
+
   /**
    * Handles Game Over.
    */
@@ -215,6 +225,9 @@ class GameController {
     });
 
     // Handle cancel button
-    document.querySelector('#close')?.onClick?.listen((_){resetGame();view.closeForm();});
+    document.querySelector('#close')?.onClick?.listen((_){
+      resetGame();
+      view.closeForm();
+    });
   }
 }

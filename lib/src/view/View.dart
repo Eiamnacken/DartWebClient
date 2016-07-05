@@ -80,9 +80,7 @@ class View {
 
   void update(Game model, {List<Map> scores: const []}) {
 
-    welcome.style.display = model.gameOver() ? "block" : "none";
-    back.style.display = model.gameOver() ? "block" : "none";
-    vanishedButton.style.display = model.gameOver() ? "none" : "block";
+
     level.innerHtml="Level: ${model.countLevel + 1}";
     points.innerHtml = "Points: ${model.points}";
 
@@ -148,7 +146,7 @@ class View {
         "</div>"
         "<div id='highscorewarning'></div>";
 
-    if (scores.isEmpty || score > scores.last['score'] || scores.length < 10) {
+    if ((scores.isEmpty || score > scores.last['score'] || scores.length < 10)&& score>0) {
       overlay.appendHtml(
           this.generateHighscore(scores, score: score) +
               "<form id='highscoreform'>"
@@ -165,6 +163,8 @@ class View {
 
   }
 
+
+
   /**
    * Gets the user input from the highscore form.
    */
@@ -174,5 +174,7 @@ class View {
    * Gets the password input from the highscore form.
    */
   String get password => (document.querySelector('#password') as InputElement).value;
+
+
 
 }
