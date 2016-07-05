@@ -104,41 +104,41 @@ class Level {
       }
     }
     //Aktiviere Items an einer random stelle
-    if (_countPositiveItems != 0) {
-      Random randomNumber = new Random.secure();
-      int counter = _countPositiveItems;
-      List<Ball> itemBalls = [];
-      Ball ballBuffer = balls.first;
-      Direction ballDirection;
-      while (counter != 0) {
-        Brick objectBuffer = bricks[randomNumber.nextInt(bricks.length )];
-
-        if (objectBuffer._item == null) {
-          for (int i = 0; i < 3; i++) {
-            ballDirection=Direction.values[randomNumber.nextInt(5)];
-            Ball itemBall = new Ball.withDirection(
-                objectBuffer.xPosition,
-                objectBuffer.yPosition,
-                ballBuffer.height,
-                ballBuffer.width,
-                ballBuffer._moveSpeed,
-                ballDirection
-                );
-            itemBalls.add(itemBall);
-            balls.add(itemBall);
-          }
-          objectBuffer._item = new Item.withBall(
-              objectBuffer.xPosition,
-              objectBuffer.yPosition,
-              brickHeight,
-              brickLength,
-              itemSpeed,
-              Effect.secondBall,
-              itemBalls);
-          counter--;
-        }
-      }
-    }
+//    if (_countPositiveItems != 0) {
+//      Random randomNumber = new Random.secure();
+//      int counter = _countPositiveItems;
+//      List<Ball> itemBalls = [];
+//      Ball ballBuffer = balls.first;
+//      Direction ballDirection;
+//      while (counter != 0) {
+//        Brick objectBuffer = bricks[randomNumber.nextInt(bricks.length )];
+//
+//        if (objectBuffer._item == null) {
+//          for (int i = 0; i < 3; i++) {
+//            ballDirection=Direction.values[randomNumber.nextInt(5)];
+//            Ball itemBall = new Ball.withDirection(
+//                objectBuffer.xPosition,
+//                objectBuffer.yPosition,
+//                ballBuffer.height,
+//                ballBuffer.width,
+//                ballBuffer._moveSpeed,
+//                ballDirection
+//                );
+//            itemBalls.add(itemBall);
+//            balls.add(itemBall);
+//          }
+//          objectBuffer._item = new Item.withBall(
+//              objectBuffer.xPosition,
+//              objectBuffer.yPosition,
+//              brickHeight,
+//              brickLength,
+//              itemSpeed,
+//              Effect.secondBall,
+//              itemBalls);
+//          counter--;
+//        }
+//      }
+//    }
   }
 
   Player get player => _player;

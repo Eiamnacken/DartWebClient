@@ -129,8 +129,13 @@ class View {
         .innerHtml = message;
   }
 
+  void higscoreMessage(String message){
+    document.querySelector('#highscorewarning')
+    .innerHtml=message;
+  }
+
   String generateHighscore(List<Map> scores, { int score: 0 }) {
-    final list = scores.map((entry) => "<li>${entry['name']}: ${entry['score']}</li>").join("");
+    final list = scores.map((entry) => "<li>${entry['username']}: ${entry['state']['points']}</li>").join("");
     final points = "You got $score points";
     return "<div id='scorelist'>${ score == 0 ? "" : points }${ list.isEmpty? "" : "<ul>$list</ul>"}</div>";
   }
@@ -139,14 +144,14 @@ class View {
 
     if (overlay.innerHtml != "") return;
     final score = model.points;
-
+    document.querySelector('#title').innerHtml='';
     overlay.innerHtml =
     "<div id='highscore'>"
         "   <h1>Highscore</h1>"
         "</div>"
         "<div id='highscorewarning'></div>";
-
-    if ((scores.isEmpty || score > scores.last['score'] || scores.length < 10)&& score>0) {
+    print(scores);
+     if(score>0&&scores!=null&&(scores.isEmpty || scores.last['state']['points']<score || scores.length < 10)) {
       overlay.appendHtml(
           this.generateHighscore(scores, score: score) +
               "<form id='highscoreform'>"
@@ -160,7 +165,6 @@ class View {
       overlay.appendHtml(this.generateHighscore(scores, score: score));
       overlay.appendHtml("<button type='button' id='close' class='discard'>Close</button>");
     }
-
   }
 
 

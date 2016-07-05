@@ -122,6 +122,7 @@ class GameController {
         // Handle cancel button
         document.querySelector('#close')?.onClick?.listen((_){
           view.closeForm();
+          document.querySelector('#title').innerHtml='Brick Break';
         });
       });
     });
@@ -160,7 +161,7 @@ class GameController {
     view.update(game);
 
     // Show TOP 10 Highscore
-    final highscore = await gameKey.getStates();
+    final List<Map> highscore = await gameKey.getStates();
     view.showHighscore(game, highscore);
 
     // Handle save button
@@ -168,11 +169,11 @@ class GameController {
 
       String user = view.user;
       String pwd  = view.password;
-      if (user?.isEmpty) { view.warning("Please provide user name."); return; }
+      if (user?.isEmpty) { view.higscoreMessage("Please provide user name."); return; }
 
       String id = await gameKey.getUserId(user);
       if (id == null) {
-        view.warning(
+        view.higscoreMessage(
             "User $user not found. Shall we create it?"
                 "<button id='create'>Create</button>"
                 "<button id='cancel' class='discard'>Cancel</button>"
@@ -181,24 +182,23 @@ class GameController {
         document.querySelector('#create')?.onClick?.listen((_) async {
           final usr = await gameKey.registerUser(user, pwd);
           if (usr == null) {
-            view.warning(
+            view.higscoreMessage(
                 "Could not register user $user. "
                     "User might already exist or gamekey service not available."
             );
             return;
           }
-          view.warning("");
+          view.higscoreMessage("");
           final stored = await gameKey.storeState(usr['id'], {
             'version': '0.0.2',
             'points': game.points
           });
           if (stored) {
-            view.warning("${game.points} points stored for $user");
-            view.closeForm();
+            view.higscoreMessage("${game.points} points stored for $user");
             newGame();
             return;
           } else {
-            view.warning("Could not save highscore. Retry?");
+            view.higscoreMessage("Could not save highscore. Retry?");
             return;
           }
         });
@@ -207,18 +207,19 @@ class GameController {
       // User exists.
       if (id != null) {
         final user = await gameKey.getUser(id, pwd);
-        if (user == null) { view.warning("Wrong access credentials."); return; };
+        if (user == null) { view.higscoreMessage("Wrong access credentials."); return; };
         final stored = await gameKey.storeState(user['id'], {
           'version': '0.0.2',
           'points': game.points
         });
         if (stored) {
-          view.warning("${game.points} points stored for ${user['name']}");
+          view.higscoreMessage("${game.points} points stored for ${user['name']}");
           view.closeForm();
+          resetGame();
           newGame();
           return;
         } else {
-          view.warning("Could not save highscore. Retry?");
+          view.higscoreMessage("Could not save highscore. Retry?");
           return;
         }
       }
@@ -228,6 +229,7 @@ class GameController {
     document.querySelector('#close')?.onClick?.listen((_){
       resetGame();
       view.closeForm();
+      document.querySelector('#title').innerHtml='';
     });
   }
 }

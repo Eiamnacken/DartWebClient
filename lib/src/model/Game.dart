@@ -129,13 +129,16 @@ class Game {
   ///
   void newLevel() {
     if(countLevel != gameFields.length - 1) {
+      gameFields[countLevel].balls.forEach((ball){
+        ball.activated=false;
+        ball.destroyed=true;
+      });
       countLevel++;
     }
 
   }
 
   void increasePoints(Health health){
-    if(health==Health.grey) gameFields[countLevel].bricks.removeLast();
     if(health==Health.brown) return;
     points += 10;
   }
@@ -143,7 +146,7 @@ class Game {
   /// Ist das Spiel zu ende?
   ///
   bool gameEnds(){
-    if(countLevel==gameFields.length){
+    if(countLevel==gameFields.length-1){
         if(won()){
           return true;
         }
@@ -165,22 +168,5 @@ class Game {
       level.readLevel(jsonLevel);
       gameFields.add(level);
     }
-  }
-
-
-
-  ///
-  /// Setzt alle werte auf den Standard zurück
-  ///
-  void _resetState() {
-    gameFields.forEach((level){
-      level.balls.forEach((ball){
-        ball.activated=false;
-        ball.destroyed=false;
-      });
-      level.balls.first.activated=true;
-    });
-    countLevel=0;
-    points=0;
   }
 }
